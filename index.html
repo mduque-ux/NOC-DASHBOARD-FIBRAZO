@@ -24,8 +24,8 @@
         .tab-nav { display: flex; gap: 10px; margin-bottom: 20px; }
         .tab-btn { padding: 12px 25px; border-radius: 12px; border: none; background: var(--sf); font-weight: 700; color: var(--t2); cursor: pointer; transition: 0.3s; box-shadow: var(--sh); }
         .tab-btn.active { background: var(--bk); color: #fff; }
-        .tab-panel { display: none; animation: fadeIn 0.4s ease; }
-        .tab-panel.active { display: block; }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; animation: fadeIn 0.4s ease; }
 
         /* KPIS */
         .kgrid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 25px; }
@@ -50,7 +50,7 @@
         .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .fila-incidente { display: flex; gap: 10px; margin-bottom: 10px; padding: 15px; background: #F9FAFB; border-radius: 12px; border-left: 5px solid #EF4444; }
         .fii { padding: 10px; border-radius: 8px; border: 1px solid var(--bd); font-size: 14px; width: 100%; font-family: var(--fb); }
-        .btn-wa { background: #25D366; color: #fff; padding: 15px 30px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; }
+        .btn-wa { background: #25D366; color: #fff; padding: 15px 30px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; transition: 0.3s; }
         .fta { width: 100%; min-height: 120px; padding: 15px; border-radius: 12px; border: 1px solid var(--bd); margin-top: 15px; font-family: var(--fb); }
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -60,8 +60,8 @@
 
 <div class="wrap">
     <div class="tab-nav">
-        <button id="tab-dash" class="tab-btn active" onclick="switchTab('dash')">Dashboard NOC</button>
-        <button id="tab-turno" class="tab-btn" onclick="switchTab('turno')">Entrega de Turno</button>
+        <button id="tab-btn-dash" class="tab-btn active" onclick="switchTab('dash')">Dashboard NOC</button>
+        <button id="tab-btn-turno" class="tab-btn" onclick="switchTab('turno')">Entrega de Turno</button>
     </div>
 
     <div id="panel-dash" class="tab-panel active">
@@ -69,7 +69,7 @@
             <div class="brand">FIBRA<span>ZO</span> — NOC</div>
             <div style="text-align: right">
                 <div id="liveClock" style="font-family: 'DM Mono'; font-size: 18px; font-weight: 700;">--:--:--</div>
-                <div style="font-size: 11px; opacity: 0.6;">Monitoreo OdooBot Activo</div>
+                <div style="font-size: 11px; opacity: 0.6;">Sincronizado con Google Sheets</div>
             </div>
         </div>
 
@@ -86,7 +86,7 @@
             <div class="cb">
                 <table class="tbl" id="ticketTable">
                     <thead><tr><th>ID</th><th>Evento / Sitio</th><th>País</th><th>Estado</th><th>SLA</th></tr></thead>
-                    <tbody><tr><td colspan="5" style="text-align:center; padding:50px; color:var(--t3);">Sincronizando con Google Sheets...</td></tr></tbody>
+                    <tbody><tr><td colspan="5" style="text-align:center; padding:50px; color:var(--t3);">Sincronizando con la nube...</td></tr></tbody>
                 </table>
             </div>
         </div>
@@ -95,13 +95,17 @@
     <div id="panel-turno" class="tab-panel">
         <div class="card" style="background:var(--bk); color:#fff; padding:30px;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div><h2 style="font-family:var(--fh); color:var(--g); font-size:24px;">ENTREGA DE TURNO</h2><p style="opacity:0.5; font-size:12px;">Reporte automático vía WhatsApp</p></div>
+                <div><h2 style="font-family:var(--fh); color:var(--g); font-size:24px;">ENTREGA DE TURNO</h2><p style="opacity:0.5; font-size:12px;">Generación de reporte estructurado</p></div>
                 <div style="display:flex; gap:15px;">
                     <div><label style="font-size:10px; opacity:0.5;">INGENIERO</label><br>
-                        <select id="wa-ing" class="fii" style="background:#222; color:#fff; border:none;"><option>Marlon Duque</option><option>Jhon Lopez</option><option>Joseph Montenegro</option></select>
+                        <select id="wa-ing" class="fii" style="background:#222; color:#fff; border:none; width: 180px;">
+                            <option>Marlon Duque</option><option>Jhon Lopez</option><option>Joseph Montenegro</option><option>Luisa Benitez</option>
+                        </select>
                     </div>
                     <div><label style="font-size:10px; opacity:0.5;">TURNO</label><br>
-                        <select id="wa-turno" class="fii" style="background:#222; color:#fff; border:none;"><option>06:00 - 12:00</option><option>12:00 - 18:00</option><option>18:00 - 00:00</option></select>
+                        <select id="wa-turno" class="fii" style="background:#222; color:#fff; border:none; width: 130px;">
+                            <option>06:00 - 12:00</option><option>12:00 - 18:00</option><option>18:00 - 00:00</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -110,16 +114,16 @@
         <div class="g2">
             <div class="col">
                 <div class="card">
-                    <div class="ch">🔴 FALLAS MASIVAS ACTIVAS</div>
+                    <div class="ch">🔴 FALLAS MASIVAS</div>
                     <div class="cb" id="lista-masivas"></div>
-                    <div class="cb" style="padding-top:0;"><button style="width:100%; padding:12px; border:2px dashed var(--bd); background:transparent; cursor:pointer;" onclick="addItem('masivas')">+ Agregar Falla</button></div>
+                    <div class="cb" style="padding-top:0;"><button style="width:100%; padding:12px; border:2px dashed var(--bd); background:transparent; cursor:pointer;" onclick="addItem()">+ Agregar Falla</button></div>
                 </div>
             </div>
             <div class="col">
                 <div class="card">
                     <div class="ch">📢 RESUMEN DEL TURNO</div>
                     <div class="cb">
-                        <textarea id="resumen-exec" class="fta" placeholder="Escribe el resumen aquí..."></textarea>
+                        <textarea id="resumen-exec" class="fta" placeholder="Escribe el resumen ejecutivo aquí..."></textarea>
                     </div>
                 </div>
             </div>
@@ -131,14 +135,14 @@
 </div>
 
 <script>
-    // URL de tu hoja de Google Sheets (Publicada como CSV)
     const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS1CyYTwmNW8H1Ri9UT6jt69SZ1d_WzwMHkxRmuwPydhZon2ANEggmTPY/pub?output=csv";
 
     function switchTab(id) {
         document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        
         document.getElementById('panel-' + id).classList.add('active');
-        document.getElementById('tab-' + id).classList.add('active');
+        document.getElementById('tab-btn-' + id).classList.add('active');
     }
 
     async function fetchData() {
@@ -151,46 +155,4 @@
             const tbody = document.querySelector('#ticketTable tbody');
             if(tbody) {
                 tbody.innerHTML = "";
-                for(let i=1; i < rows.length; i++) {
-                    const estado = (rows[i][3] || "").trim();
-                    const stClass = estado.toLowerCase().includes('resuelto') ? 'resuelto' : 'nuevo';
-                    tbody.innerHTML += `<tr><td><b>${rows[i][0]}</b></td><td>${rows[i][1]}</td><td>${rows[i][2]}</td><td><span class="badge ${stClass}">${estado}</span></td><td>${rows[i][4] || 'N/A'}</td></tr>`;
-                }
-            }
-        } catch (e) { console.error("Error al cargar datos"); }
-    }
-
-    function addItem(tipo) {
-        const cont = document.getElementById('lista-masivas');
-        const div = document.createElement('div');
-        div.className = 'fila-incidente';
-        div.innerHTML = `<input type="text" class="fii site-name" placeholder="Sitio"><input type="text" class="fii ticket-id" placeholder="Ticket"><button onclick="this.parentElement.remove()" style="border:none;background:none;cursor:pointer;">✕</button>`;
-        cont.appendChild(div);
-    }
-
-    function sendWhatsApp() {
-        const ing = document.getElementById('wa-ing').value;
-        const turno = document.getElementById('wa-turno').value;
-        const resumen = document.getElementById('resumen-exec').value;
-        
-        let fallas = "";
-        document.querySelectorAll('.fila-incidente').forEach(f => {
-            const site = f.querySelector('.site-name').value;
-            const ticket = f.querySelector('.ticket-id').value;
-            if(site) fallas += `• ${site} (ID: ${ticket})\n`;
-        });
-
-        const mensaje = `🚀 *ENTREGA DE TURNO NOC FIBRAZO*\n\n` +
-                        `👤 *Ingeniero:* ${ing}\n` +
-                        `⏰ *Turno:* ${turno}\n\n` +
-                        `📢 *Resumen:*\n${resumen || 'Sin comentarios'}\n\n` +
-                        `🔴 *Fallas Masivas:*\n${fallas || 'Sin novedades'}`;
-
-        window.open(`https://wa.me/?text=${encodeURIComponent(mensaje)}`, '_blank');
-    }
-
-    setInterval(() => { document.getElementById('liveClock').textContent = new Date().toLocaleTimeString(); }, 1000);
-    fetchData();
-</script>
-</body>
-</html>
+                for(let i=1;

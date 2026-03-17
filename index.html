@@ -11,51 +11,48 @@
             --bd: #E8E9EC; --t1: #0D0D0D; --t2: #555E6B; --t3: #9AA0AB;
             --sh: 0 4px 12px rgba(0,0,0,0.05); --fh: 'Syne', sans-serif; --fb: 'DM Sans', sans-serif;
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: var(--fb); background: var(--bg); color: var(--t1); padding: 20px; line-height: 1.5; }
         .wrap { max-width: 1200px; margin: 0 auto; }
 
-        /* HEADER & NAVIGATION */
+        /* HEADER */
         .hdr { background: var(--bk); border-radius: 20px; padding: 25px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; color: #fff; }
         .brand { font-family: var(--fh); font-size: 22px; font-weight: 800; }
         .brand span { color: var(--g); }
         
+        /* NAVIGATION */
         .tab-nav { display: flex; gap: 10px; margin-bottom: 20px; }
         .tab-btn { padding: 12px 25px; border-radius: 12px; border: none; background: var(--sf); font-weight: 700; color: var(--t2); cursor: pointer; transition: 0.3s; box-shadow: var(--sh); }
         .tab-btn.active { background: var(--bk); color: #fff; }
-
         .tab-panel { display: none; animation: fadeIn 0.4s ease; }
         .tab-panel.active { display: block; }
 
         /* KPIS */
         .kgrid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 25px; }
         .kpi { background: var(--sf); border-radius: 18px; padding: 20px; box-shadow: var(--sh); border-top: 5px solid var(--kc); }
-        .kpi-l { font-size: 11px; font-weight: 700; color: var(--t3); text-transform: uppercase; letter-spacing: 0.5px; }
+        .kpi-l { font-size: 11px; font-weight: 700; color: var(--t3); text-transform: uppercase; }
         .kpi-v { font-family: var(--fh); font-size: 36px; font-weight: 800; margin-top: 5px; }
 
-        /* CARDS */
+        /* CARDS & TABLES */
         .card { background: var(--sf); border-radius: 20px; border: 1px solid var(--bd); margin-bottom: 20px; box-shadow: var(--sh); overflow: hidden; }
-        .ch { padding: 15px 25px; background: #FAFAFB; border-bottom: 1px solid var(--bd); display: flex; justify-content: space-between; align-items: center; font-weight: 700; }
+        .ch { padding: 15px 25px; background: #FAFAFB; border-bottom: 1px solid var(--bd); font-weight: 700; display: flex; justify-content: space-between; }
         .cb { padding: 25px; }
-
-        /* TABLES */
         .tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
-        .tbl th { text-align: left; padding: 12px; color: var(--t3); font-size: 11px; text-transform: uppercase; border-bottom: 2px solid var(--bg); }
+        .tbl th { text-align: left; padding: 12px; color: var(--t3); border-bottom: 2px solid var(--bg); font-size: 11px; text-transform: uppercase; }
         .tbl td { padding: 15px 12px; border-bottom: 1px solid var(--bg); }
+        
+        /* BADGES */
         .badge { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
         .badge.nuevo { background: #FEE2E2; color: #991B1B; }
         .badge.resuelto { background: #D1FAE5; color: #065F46; }
 
         /* ENTREGA DE TURNO */
         .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .fila-incidente { display: grid; grid-template-columns: 1fr 100px 40px; gap: 10px; margin-bottom: 10px; padding: 15px; background: #F9FAFB; border-radius: 12px; border-left: 5px solid #EF4444; }
+        .fila-incidente { display: flex; gap: 10px; margin-bottom: 10px; padding: 15px; background: #F9FAFB; border-radius: 12px; border-left: 5px solid #EF4444; }
         .fii { padding: 10px; border-radius: 8px; border: 1px solid var(--bd); font-size: 14px; width: 100%; font-family: var(--fb); }
-        .status-btn { padding: 8px 15px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; border: 1px solid var(--bd); background: #fff; }
-        .fta { width: 100%; min-height: 120px; padding: 15px; border-radius: 12px; border: 1px solid var(--bd); font-family: inherit; font-size: 14px; margin-top: 15px; }
-        .btn-add { width: 100%; padding: 12px; border: 2px dashed var(--bd); background: transparent; color: var(--t3); border-radius: 12px; cursor: pointer; font-weight: 700; }
-        .btn-save { background: var(--bk); color: #fff; padding: 15px 40px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; font-size: 15px; }
-
+        .btn-wa { background: #25D366; color: #fff; padding: 15px 30px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; }
+        .fta { width: 100%; min-height: 120px; padding: 15px; border-radius: 12px; border: 1px solid var(--bd); margin-top: 15px; font-family: var(--fb); }
+        
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -72,7 +69,7 @@
             <div class="brand">FIBRA<span>ZO</span> — NOC</div>
             <div style="text-align: right">
                 <div id="liveClock" style="font-family: 'DM Mono'; font-size: 18px; font-weight: 700;">--:--:--</div>
-                <div style="font-size: 11px; opacity: 0.6;">martes, 17 de marzo de 2026</div>
+                <div style="font-size: 11px; opacity: 0.6;">Monitoreo OdooBot Activo</div>
             </div>
         </div>
 
@@ -89,7 +86,7 @@
             <div class="cb">
                 <table class="tbl" id="ticketTable">
                     <thead><tr><th>ID</th><th>Evento / Sitio</th><th>País</th><th>Estado</th><th>SLA</th></tr></thead>
-                    <tbody><tr><td colspan="5" style="text-align:center; padding:50px; color:var(--t3);">Sincronizando con Gmail...</td></tr></tbody>
+                    <tbody><tr><td colspan="5" style="text-align:center; padding:50px; color:var(--t3);">Sincronizando con Google Sheets...</td></tr></tbody>
                 </table>
             </div>
         </div>
@@ -98,13 +95,13 @@
     <div id="panel-turno" class="tab-panel">
         <div class="card" style="background:var(--bk); color:#fff; padding:30px;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div><h2 style="font-family:var(--fh); color:var(--g); font-size:24px;">ENTREGA DE TURNO</h2><p style="opacity:0.5; font-size:12px;">NOC Fibrazo · Registro oficial</p></div>
+                <div><h2 style="font-family:var(--fh); color:var(--g); font-size:24px;">ENTREGA DE TURNO</h2><p style="opacity:0.5; font-size:12px;">Reporte automático vía WhatsApp</p></div>
                 <div style="display:flex; gap:15px;">
-                    <div><label style="font-size:10px; opacity:0.5; text-transform:uppercase;">Ingeniero</label><br>
-                        <select class="fii" style="background:#222; color:#fff; border:none;"><option>Marlon Duque</option><option>Jhon Lopez</option><option>Joseph Montenegro</option></select>
+                    <div><label style="font-size:10px; opacity:0.5;">INGENIERO</label><br>
+                        <select id="wa-ing" class="fii" style="background:#222; color:#fff; border:none;"><option>Marlon Duque</option><option>Jhon Lopez</option><option>Joseph Montenegro</option></select>
                     </div>
-                    <div><label style="font-size:10px; opacity:0.5; text-transform:uppercase;">Turno</label><br>
-                        <select class="fii" style="background:#222; color:#fff; border:none;"><option>06:00 - 12:00</option><option>12:00 - 18:00</option></select>
+                    <div><label style="font-size:10px; opacity:0.5;">TURNO</label><br>
+                        <select id="wa-turno" class="fii" style="background:#222; color:#fff; border:none;"><option>06:00 - 12:00</option><option>12:00 - 18:00</option><option>18:00 - 00:00</option></select>
                     </div>
                 </div>
             </div>
@@ -113,35 +110,28 @@
         <div class="g2">
             <div class="col">
                 <div class="card">
-                    <div class="ch">🔴 FALLAS MASIVAS</div>
+                    <div class="ch">🔴 FALLAS MASIVAS ACTIVAS</div>
                     <div class="cb" id="lista-masivas"></div>
-                    <div class="cb" style="padding-top:0;"><button class="btn-add" onclick="addItem('masivas')">+ Agregar Falla Masiva</button></div>
-                </div>
-                <div class="card">
-                    <div class="ch">📢 RESUMEN EJECUTIVO</div>
-                    <div class="cb">
-                        <div style="display:flex; gap:10px;">
-                            <button class="status-btn" onclick="setExecutive('Estable')">🟢 Estable</button>
-                            <button class="status-btn" onclick="setExecutive('Alerta')">🟡 Alerta</button>
-                            <button class="status-btn" onclick="setExecutive('Crítico')">🔴 Crítico</button>
-                        </div>
-                        <textarea id="resumen-exec" class="fta" placeholder="Resumen del turno para el relevo..."></textarea>
-                    </div>
+                    <div class="cb" style="padding-top:0;"><button style="width:100%; padding:12px; border:2px dashed var(--bd); background:transparent; cursor:pointer;" onclick="addItem('masivas')">+ Agregar Falla</button></div>
                 </div>
             </div>
             <div class="col">
                 <div class="card">
-                    <div class="ch">📌 PENDIENTES / TAREAS</div>
-                    <div class="cb" id="lista-pendientes"></div>
-                    <div class="cb" style="padding-top:0;"><button class="btn-add" onclick="addItem('pendientes')">+ Nueva Tarea</button></div>
+                    <div class="ch">📢 RESUMEN DEL TURNO</div>
+                    <div class="cb">
+                        <textarea id="resumen-exec" class="fta" placeholder="Escribe el resumen aquí..."></textarea>
+                    </div>
                 </div>
             </div>
         </div>
-        <div style="text-align:right; margin-top:20px;"><button class="btn-save">REGISTRAR TURNO ✓</button></div>
+        <div style="text-align:right; margin-top:20px;">
+            <button class="btn-wa" onclick="sendWhatsApp()">📱 GENERAR REPORTE WHATSAPP</button>
+        </div>
     </div>
 </div>
 
 <script>
+    // URL de tu hoja de Google Sheets (Publicada como CSV)
     const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS1CyYTwmNW8H1Ri9UT6jt69SZ1d_WzwMHkxRmuwPydhZon2ANEggmTPY/pub?output=csv";
 
     function switchTab(id) {
@@ -162,29 +152,41 @@
             if(tbody) {
                 tbody.innerHTML = "";
                 for(let i=1; i < rows.length; i++) {
-                    const stClass = rows[i][3].toLowerCase().includes('resuelto') ? 'resuelto' : 'nuevo';
-                    tbody.innerHTML += `<tr><td><b>${rows[i][0]}</b></td><td>${rows[i][1]}</td><td>${rows[i][2]}</td><td><span class="badge ${stClass}">${rows[i][3]}</span></td><td>${rows[i][4] || '--'}</td></tr>`;
+                    const estado = (rows[i][3] || "").trim();
+                    const stClass = estado.toLowerCase().includes('resuelto') ? 'resuelto' : 'nuevo';
+                    tbody.innerHTML += `<tr><td><b>${rows[i][0]}</b></td><td>${rows[i][1]}</td><td>${rows[i][2]}</td><td><span class="badge ${stClass}">${estado}</span></td><td>${rows[i][4] || 'N/A'}</td></tr>`;
                 }
             }
-        } catch (e) { console.error("Error cargando datos"); }
+        } catch (e) { console.error("Error al cargar datos"); }
     }
 
     function addItem(tipo) {
-        const cont = document.getElementById('lista-' + tipo);
+        const cont = document.getElementById('lista-masivas');
         const div = document.createElement('div');
-        if(tipo === 'masivas') {
-            div.className = 'fila-incidente';
-            div.innerHTML = `<input type="text" class="fii" placeholder="Sitio"><input type="text" class="fii" placeholder="Ticket"><button onclick="this.parentElement.remove()" style="border:none;background:none;cursor:pointer;">✕</button>`;
-        } else {
-            div.style = "display:flex; gap:10px; margin-bottom:10px; align-items:center;";
-            div.innerHTML = `<input type="checkbox"> <input type="text" class="fii" placeholder="Tarea...">`;
-        }
+        div.className = 'fila-incidente';
+        div.innerHTML = `<input type="text" class="fii site-name" placeholder="Sitio"><input type="text" class="fii ticket-id" placeholder="Ticket"><button onclick="this.parentElement.remove()" style="border:none;background:none;cursor:pointer;">✕</button>`;
         cont.appendChild(div);
     }
 
-    function setExecutive(msg) {
-        const area = document.getElementById('resumen-exec');
-        area.value = `[ESTADO ${msg.toUpperCase()}] ` + area.value;
+    function sendWhatsApp() {
+        const ing = document.getElementById('wa-ing').value;
+        const turno = document.getElementById('wa-turno').value;
+        const resumen = document.getElementById('resumen-exec').value;
+        
+        let fallas = "";
+        document.querySelectorAll('.fila-incidente').forEach(f => {
+            const site = f.querySelector('.site-name').value;
+            const ticket = f.querySelector('.ticket-id').value;
+            if(site) fallas += `• ${site} (ID: ${ticket})\n`;
+        });
+
+        const mensaje = `🚀 *ENTREGA DE TURNO NOC FIBRAZO*\n\n` +
+                        `👤 *Ingeniero:* ${ing}\n` +
+                        `⏰ *Turno:* ${turno}\n\n` +
+                        `📢 *Resumen:*\n${resumen || 'Sin comentarios'}\n\n` +
+                        `🔴 *Fallas Masivas:*\n${fallas || 'Sin novedades'}`;
+
+        window.open(`https://wa.me/?text=${encodeURIComponent(mensaje)}`, '_blank');
     }
 
     setInterval(() => { document.getElementById('liveClock').textContent = new Date().toLocaleTimeString(); }, 1000);

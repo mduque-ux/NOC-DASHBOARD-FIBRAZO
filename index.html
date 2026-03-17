@@ -1,256 +1,780 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NOC Dashboard - Fibrazo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-    <style>
-        /* ═══ ESTILOS BASE ═══ */
-        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-        :root{
-            --g:#1DB954; --gd:#15883C; --gl:#E8F8EE; --bk:#0D0D0D; 
-            --bg:#F2F3F5; --sf:#fff; --bd:#E8E9EC; --t1:#0D0D0D; 
-            --t2:#555E6B; --t3:#9AA0AB; --fh:'Syne',sans-serif; 
-            --fb:'DM Sans',sans-serif; --fm:'DM Mono',monospace; 
-            --sh:0 1px 4px rgba(0,0,0,.07),0 0 0 1px rgba(0,0,0,.04)
-        }
 
-        /* ═══ MODO OSCURO ═══ */
-        body.dark-mode {
-            --bg: #050505; --sf: #121212; --bd: #2A2A2A;
-            --t1: #EEEEEE; --t2: #A0A0A0; --sh: 0 4px 12px rgba(0,0,0,0.5);
-        }
-        body.dark-mode .card, body.dark-mode .tab-nav, body.dark-mode .rbar, 
-        body.dark-mode .tkpi, body.dark-mode .acc, body.dark-mode .ach, body.dark-mode .acb {
-            background: #121212; border-color: #2A2A2A; color: var(--t1);
-        }
-        body.dark-mode .fii, body.dark-mode .tfs, body.dark-mode .fta {
-            background: #1A1A1A; color: #fff; border-color: #333;
-        }
-
-        body{font-family:var(--fb);background:var(--bg);color:var(--t1);font-size:13px;line-height:1.5;transition: background 0.3s;}
-        .wrap{max-width:1080px;margin:0 auto;padding:20px 16px 40px}
-        
-        /* ═══ COMPONENTES UI ═══ */
-        .tab-nav{display:flex;gap:4px;margin-bottom:16px;background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:5px;width:fit-content}
-        .tab-btn{padding:7px 18px;border-radius:8px;border:none;background:transparent;font-family:var(--fb);font-weight:500;color:var(--t2);cursor:pointer;transition:all .18s}
-        .tab-btn.active{background:var(--bk);color:#fff}
-        .tab-panel{display:none}
-        .tab-panel.active{display:block}
-
-        .hdr{background:var(--bk);border-radius:16px;padding:20px 24px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;color:#fff}
-        .logo{width:44px;height:44px;background:var(--g);border-radius:11px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px rgba(29,185,84,.25)}
-        .brand{font-family:var(--fh);font-size:16px;font-weight:800} .brand span{color:var(--g)}
-
-        .kgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-bottom:12px}
-        .kpi{background:var(--sf);border-radius:12px;padding:14px;box-shadow:var(--sh);border-top:3px solid var(--kc)}
-        .kpi-v{font-family:var(--fh);font-size:28px;font-weight:800}
-
-        .card{background:var(--sf);border-radius:12px;border:1px solid var(--bd);margin-bottom:12px;overflow:hidden}
-        .ch{padding:11px 14px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center}
-        .cb{padding:12px 14px}
-
-        .tact{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--sf);border:1px solid var(--bd);border-radius:12px;margin-top:12px}
-        .btnp{background:var(--bk);color:#fff;padding:8px 20px;border-radius:8px;border:none;font-weight:600;cursor:pointer}
-        .btns{background:var(--sf);border:1px solid var(--bd);padding:8px 14px;border-radius:8px;cursor:pointer}
-
-        .theme-toggle {
-            position: fixed; bottom: 24px; left: 24px; width: 44px; height: 44px; 
-            border-radius: 50%; background: var(--bk); color: #fff; 
-            display: flex; align-items: center; justify-content: center; 
-            cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 1000; font-size: 20px;
-        }
-
-        .fta { width: 100%; min-height: 80px; padding: 10px; border-radius: 8px; border: 1px solid var(--bd); font-family: var(--fb); }
-
-        @media(max-width:720px){ .kgrid{grid-template-columns:repeat(2,1fr)} .wrap{padding:10px}}
-    </style>
-</head>
-<body>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--g:#1DB954;--gd:#15883C;--gl:#E8F8EE;--bk:#0D0D0D;--bg:#F2F3F5;--sf:#fff;--bd:#E8E9EC;--t1:#0D0D0D;--t2:#555E6B;--t3:#9AA0AB;--fh:'Syne',sans-serif;--fb:'DM Sans',sans-serif;--fm:'DM Mono',monospace;--sh:0 1px 4px rgba(0,0,0,.07),0 0 0 1px rgba(0,0,0,.04)}
+body{font-family:var(--fb);background:var(--bg);color:var(--t1);font-size:13px;line-height:1.5}
+.wrap{max-width:1080px;margin:0 auto;padding:20px 16px 40px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.col{display:flex;flex-direction:column;gap:12px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes fillBar{from{width:0!important}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.tab-nav{display:flex;gap:4px;margin-bottom:16px;background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:5px;width:fit-content}
+.tab-btn{display:flex;align-items:center;gap:7px;padding:7px 18px;border-radius:8px;border:none;background:transparent;font-family:var(--fb);font-size:13px;font-weight:500;color:var(--t2);cursor:pointer;transition:all .18s;white-space:nowrap}
+.tab-btn:hover{background:var(--bg);color:var(--t1)}
+.tab-btn.active{background:var(--bk);color:#fff}
+.tab-dot{width:7px;height:7px;border-radius:50%;background:var(--t3);flex-shrink:0;transition:background .18s}
+.tab-btn.active .tab-dot{background:var(--g)}
+.tab-panel{display:none}
+.tab-panel.active{display:block;animation:fadeUp .3s ease}
+.hdr{background:var(--bk);border-radius:16px;padding:20px 24px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;position:relative;overflow:hidden}
+.hdr::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(29,185,84,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(29,185,84,.04) 1px,transparent 1px);background-size:32px 32px;pointer-events:none}
+.hdr-l{display:flex;align-items:center;gap:14px;position:relative}
+.logo{width:44px;height:44px;background:var(--g);border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 0 3px rgba(29,185,84,.25)}
+.logo svg{width:24px;height:24px}
+.brand{font-family:var(--fh);font-size:16px;font-weight:800;color:#fff}
+.brand span{color:var(--g)}
+.brand-sub{font-size:11px;color:rgba(255,255,255,.4);margin-top:1px}
+.hdr-r{text-align:right;position:relative}
+.hdr-date{font-family:var(--fh);font-size:13px;font-weight:700;color:#fff}
+.hdr-time{font-size:11px;color:rgba(255,255,255,.4);margin-top:1px}
+.hdr-clock{font-family:var(--fm);font-size:11px;color:rgba(255,255,255,.3);margin-top:1px}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:20px;font-size:11px;font-weight:600;margin-top:6px}
+.chip-r{background:rgba(239,68,68,.15);color:#EF4444;border:1px solid rgba(239,68,68,.3)}
+.chip-g{background:rgba(29,185,84,.15);color:var(--g);border:1px solid rgba(29,185,84,.3)}
+.pd{width:6px;height:6px;border-radius:50%;background:currentColor;animation:pulse 1.6s ease infinite}
+.rbar{display:flex;align-items:center;justify-content:space-between;background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:8px 14px;margin-bottom:12px;gap:10px;flex-wrap:wrap}
+.rbar-l{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--t2)}
+.ldot{width:7px;height:7px;border-radius:50%;background:var(--g);animation:pulse 2s ease infinite}
+.rbtn{display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:8px;border:1px solid var(--bd);background:var(--sf);font-family:var(--fb);font-size:12px;font-weight:500;cursor:pointer;color:var(--t1);transition:all .15s}
+.rbtn:hover{background:var(--gl);border-color:var(--gd);color:var(--gd)}
+.kgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-bottom:12px}
+.kpi{background:var(--sf);border-radius:12px;padding:14px;border-top:3px solid var(--kc,var(--bd));box-shadow:var(--sh);position:relative;overflow:hidden}
+.kpi::after{content:'';position:absolute;bottom:-8px;right:-8px;width:44px;height:44px;border-radius:50%;background:var(--kc,transparent);opacity:.06}
+.kpi-l{font-size:10px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+.kpi-v{font-family:var(--fh);font-size:28px;font-weight:800;color:var(--kc,var(--t1));line-height:1}
+.kpi-s{font-size:11px;color:var(--t3);margin-top:4px}
+.card{background:var(--sf);border-radius:12px;border:1px solid var(--bd);overflow:hidden;box-shadow:var(--sh)}
+.ch{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--bd)}
+.chl{display:flex;align-items:center;gap:7px}
+.ci{width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.ct{font-family:var(--fh);font-size:13px;font-weight:700;color:var(--t1)}
+.cb{padding:12px 14px}
+.bdg{display:inline-block;font-size:10px;padding:2px 7px;border-radius:20px;font-weight:600;white-space:nowrap}
+.br{background:#FEE2E2;color:#991B1B}.by{background:#FEF3C7;color:#92400E}.bg{background:var(--gl);color:var(--gd)}.bb{background:#DBEAFE;color:#1E40AF}.bp{background:#EDE9FE;color:#5B21B6}.bn{background:#F3F4F6;color:#6B7280}
+.bnr{display:flex;align-items:flex-start;gap:7px;padding:7px 10px;border-radius:8px;font-size:12px;font-weight:500;margin-bottom:10px}
+.bnr-r{background:#FEF0F0;color:#991B1B;border-left:3px solid #EF4444}
+.bnr-y{background:#FFFBEB;color:#92400E;border-left:3px solid #F59E0B}
+.bnr-g{background:var(--gl);color:var(--gd);border-left:3px solid var(--g)}
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{text-align:left;padding:4px 7px;color:var(--t3);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--bd)}
+.tbl td{padding:6px 7px;border-bottom:1px solid #F5F6F8;vertical-align:middle;color:var(--t1)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:#FAFBFC}
+.ub{display:flex;align-items:center;gap:7px;margin-bottom:7px}
+.ub:last-child{margin-bottom:0}
+.ubn{font-size:12px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ubt{width:72px;height:5px;background:#EDEFF2;border-radius:3px;flex-shrink:0;overflow:hidden}
+.ubf{height:100%;border-radius:3px;animation:fillBar .8s ease forwards}
+.ubp{font-size:11px;font-family:var(--fm);min-width:36px;text-align:right;font-weight:600}
+.slbl{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;margin:9px 0 6px}
+.slbl:first-child{margin-top:0}
+.ipc{font-family:var(--fm);font-size:11px;background:#F3F4F6;padding:2px 7px;border-radius:5px;color:var(--t1);display:inline-block}
+.mi{display:flex;gap:9px;padding:7px 0;border-bottom:1px solid var(--bd)}
+.mi:last-child{border-bottom:none}
+.md{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.mt{font-size:12px;font-weight:600;color:var(--t1)}
+.mm{font-size:11px;color:var(--t3);margin-top:1px}
+.conc{background:var(--bk);border-radius:16px;padding:22px 26px;margin-bottom:12px;position:relative;overflow:hidden}
+.conc::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(29,185,84,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(29,185,84,.03) 1px,transparent 1px);background-size:28px 28px}
+.conci{position:relative}
+.conch{display:flex;align-items:center;gap:7px;font-family:var(--fh);font-size:12px;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px}
+.concc{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.concb{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:14px}
+.conct{font-family:var(--fh);font-size:10px;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px}
+.concit{display:flex;gap:8px;align-items:flex-start;margin-bottom:9px}
+.concit:last-child{margin-bottom:0}
+.concn{width:19px;height:19px;border-radius:50%;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.conctx{font-size:12px;color:rgba(255,255,255,.7);line-height:1.5}
+.conctx strong{color:#fff;font-weight:600}
+.ftr{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:7px;padding:10px 0 0;border-top:1px solid var(--bd);font-size:11px}
+.ftr-l{color:var(--t3)}.ftr-r{color:var(--t2);font-weight:600}
+/* Turno */
+.thdr{background:var(--bk);border-radius:16px;padding:18px 22px;margin-bottom:12px;position:relative;overflow:hidden}
+.thdr::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(29,185,84,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(29,185,84,.04) 1px,transparent 1px);background-size:32px 32px;pointer-events:none}
+.thi{position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.thtit{font-family:var(--fh);font-size:15px;font-weight:800;color:#fff}
+.thtit span{color:var(--g)}
+.thsub{font-size:11px;color:rgba(255,255,255,.4);margin-top:2px}
+.tflds{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.tfg{display:flex;flex-direction:column;gap:3px}
+.tfl{font-size:10px;font-weight:600;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.05em}
+.tfs{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:7px 11px;font-family:var(--fb);font-size:12px;font-weight:500;color:#fff;cursor:pointer;outline:none;min-width:140px}
+.tfs:focus{border-color:var(--g)}
+.tfs option{background:#1a1a1a;color:#fff}
+.tkr{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:12px}
+.tkpi{background:var(--sf);border-radius:12px;padding:12px 14px;border-left:3px solid var(--tc,var(--bd));box-shadow:var(--sh)}
+.tkl{font-size:10px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.tkv{font-family:var(--fh);font-size:26px;font-weight:800;color:var(--tc,var(--t1));line-height:1}
+.tks{font-size:11px;color:var(--t3);margin-top:3px}
+.kedit{border:none;border-bottom:2px solid var(--tc,var(--bd));border-radius:0;background:transparent;font-family:var(--fh);font-size:26px;font-weight:800;color:var(--tc,var(--t1));line-height:1;width:70px;outline:none;padding:0}
+.ir{display:grid;grid-template-columns:10px 1fr auto auto;align-items:center;gap:9px;padding:8px 11px;border-radius:8px;margin-bottom:4px;border:1px solid var(--bd);background:var(--sf)}
+.ir.sc{border-left:3px solid #EF4444;background:#FEF8F8}
+.ir.sh{border-left:3px solid #F59E0B;background:#FFFDF5}
+.is{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sc .is{background:#EF4444}
+.sh .is{background:#F59E0B}
+.id{font-size:12px;color:var(--t1);line-height:1.4}
+.id small{display:block;font-size:10px;color:var(--t3);margin-top:1px}
+.iti{font-family:var(--fm);font-size:10px;background:var(--bg);padding:2px 6px;border-radius:4px;color:var(--t2);white-space:nowrap;text-decoration:none;display:inline-block}
+.addbtn{display:flex;align-items:center;justify-content:center;gap:5px;width:100%;padding:7px 10px;border:1.5px dashed var(--bd);border-radius:8px;background:transparent;font-family:var(--fb);font-size:12px;color:var(--t3);cursor:pointer;margin-top:4px}
+.addbtn:hover{border-color:var(--g);color:var(--gd);background:var(--gl)}
+.acc{border:1px solid var(--bd);border-radius:12px;overflow:hidden;margin-bottom:9px;box-shadow:var(--sh)}
+.ach{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--sf);cursor:pointer;user-select:none}
+.ach:hover{background:#FAFBFC}
+.achl{display:flex;align-items:center;gap:7px;font-family:var(--fh);font-size:13px;font-weight:700;color:var(--t1)}
+.acai{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px}
+.acar{font-size:10px;color:var(--t3);transition:transform .2s}
+.acc.open .acar{transform:rotate(180deg)}
+.acb{padding:12px 14px;border-top:1px solid var(--bd);background:var(--sf);display:none}
+.acc.open .acb{display:block}
+.fta{width:100%;border:1px solid var(--bd);border-radius:8px;padding:9px 11px;font-family:var(--fb);font-size:12px;color:var(--t1);background:var(--bg);resize:vertical;min-height:68px;outline:none}
+.fta:focus{border-color:var(--g);background:var(--sf)}
+.fii{border:1px solid var(--bd);border-radius:6px;padding:5px 9px;font-family:var(--fb);font-size:12px;color:var(--t1);background:var(--sf);outline:none}
+.fii:focus{border-color:var(--g)}
+.fss{border:1px solid var(--bd);border-radius:6px;padding:5px 9px;font-family:var(--fb);font-size:12px;color:var(--t1);background:var(--sf);outline:none;cursor:pointer}
+.ar{display:flex;align-items:center;gap:7px;padding:6px 0;border-bottom:1px solid var(--bd)}
+.ar:last-child{border-bottom:none}
+.ql{display:flex;align-items:center;gap:9px;padding:9px 12px;border:1px solid var(--bd);border-radius:8px;text-decoration:none;color:var(--t1);background:var(--sf);margin-bottom:5px}
+.ql:hover{border-color:var(--g);background:var(--gl);color:var(--gd)}
+.qli{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.qlt{font-size:12px;font-weight:600}
+.qls{font-size:10px;color:var(--t3)}
+.tact{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:12px 14px;background:var(--sf);border:1px solid var(--bd);border-radius:12px;margin-top:12px;box-shadow:var(--sh)}
+.tact-l{font-size:12px;color:var(--t2)}
+.btnp{display:flex;align-items:center;gap:5px;padding:8px 20px;border-radius:8px;border:none;background:var(--bk);color:#fff;font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer}
+.btns{display:flex;align-items:center;gap:5px;padding:8px 14px;border-radius:8px;border:1px solid var(--bd);background:var(--sf);color:var(--t1);font-family:var(--fb);font-size:13px;font-weight:500;cursor:pointer}
+.hchips{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
+.hchip{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;background:var(--bg);color:var(--t2);border:1px solid var(--bd);cursor:pointer}
+.hchip b{color:var(--t1)}
+.warn-txt{font-size:10px;color:#F59E0B;margin-top:2px;font-weight:600;display:none}
+@media(max-width:720px){.kgrid{grid-template-columns:repeat(2,1fr)}.g2,.g3,.concc,.tkr{grid-template-columns:1fr}.wrap{padding:12px 10px 30px}}
+</style>
 
 <div class="wrap">
-    <div class="tab-nav">
-        <button class="tab-btn active" onclick="switchTab('dashboard', this)">Dashboard NOC</button>
-        <button class="tab-btn" onclick="switchTab('turno', this)">Entrega de Turno</button>
-    </div>
 
-    <div id="panel-dashboard" class="tab-panel active">
-        <div class="hdr">
-            <div style="display:flex; gap:14px; align-items:center">
-                <div class="logo"><svg viewBox="0 0 26 26" width="24" fill="#0D0D0D"><circle cx="13" cy="13" r="10" fill="none" stroke="#0D0D0D" stroke-width="2"/></svg></div>
-                <div><div class="brand">FIBRA<span>ZO</span> — NOC</div><div style="font-size:11px; opacity:0.6">Operaciones en tiempo real</div></div>
-            </div>
-            <div style="text-align:right">
-                <div id="hdrDate" style="font-weight:700"></div>
-                <div id="liveClock" style="font-family:var(--fm); font-size:11px; opacity:0.6"></div>
-            </div>
-        </div>
-
-        <div class="kgrid">
-            <div class="kpi" style="--kc:#EF9F27"><div style="font-size:10px; color:var(--t3)">TICKETS ODOO</div><div class="kpi-v">11</div></div>
-            <div class="kpi" style="--kc:#EF4444"><div style="font-size:10px; color:var(--t3)">TV CAÍDOS</div><div class="kpi-v">4</div></div>
-            <div class="kpi" style="--kc:#EF4444"><div style="font-size:10px; color:var(--t3)">BITNINJA</div><div class="kpi-v">2</div></div>
-            <div class="kpi" style="--kc:#1DB954"><div style="font-size:10px; color:var(--t3)">MOPS</div><div class="kpi-v">1</div></div>
-            <div class="kpi" style="--kc:#3B82F6"><div style="font-size:10px; color:var(--t3)">LIBERTY</div><div class="kpi-v">1</div></div>
-        </div>
-        
-        <div class="card"><div class="ch"><strong>Aviso del sistema</strong></div><div class="cb">Bienvenido al panel de control NOC. Selecciona "Entrega de Turno" para reportar.</div></div>
-    </div>
-
-    <div id="panel-turno" class="tab-panel">
-        <div class="card" style="background:var(--bk); color:#fff; border:none">
-            <div class="cb" style="display:flex; gap:15px; flex-wrap:wrap">
-                <div><label style="font-size:10px; display:block">INGENIERO</label>
-                    <select id="sel-ing" class="tfs" onchange="onIngChange()" style="padding:5px; border-radius:5px">
-                        <option value="">Seleccionar...</option>
-                        <option>Jhon Lopez</option><option>Joseph Montenegro</option>
-                        <option>Jack Osma</option><option>Durbey Toro</option>
-                        <option>Facundo Oliva 🇦🇷</option><option>Luisa Benitez</option>
-                    </select>
-                </div>
-                <div><label style="font-size:10px; display:block">TURNO</label><select id="sel-turno" class="tfs" style="padding:5px; border-radius:5px"></select></div>
-                <div><label style="font-size:10px; display:block">FECHA</label><input type="date" id="sel-fecha" class="tfs" style="padding:5px; border-radius:5px"></div>
-                <div><label style="font-size:10px; display:block">ISSUES</label><input type="number" id="kpi-issues" value="0" class="tfs" style="width:50px; padding:5px; border-radius:5px"></div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="ch"><strong>Resumen de entrega — <span id="ing-disp">Selecciona ingeniero</span></strong></div>
-            <div class="cb">
-                <textarea id="desc-ent" class="fta" placeholder="Escribe aquí los eventos más importantes del turno..."></textarea>
-                <div style="margin-top:10px">
-                    <label style="font-size:10px; color:var(--t3)">OBSERVACIONES ADICIONALES</label>
-                    <textarea id="obs-msg" class="fta" style="min-height:50px" placeholder="Notas internas..."></textarea>
-                </div>
-            </div>
-        </div>
-
-        <div class="tact">
-            <div id="tsum" style="font-size:12px; color:var(--t2)">Esperando datos...</div>
-            <div style="display:flex; gap:8px">
-                <button class="btns" onclick="copyForWhatsApp()">📱 WhatsApp</button>
-                <button class="btnp" id="btn-guardar">✓ Guardar</button>
-            </div>
-        </div>
-    </div>
+<!-- TABS -->
+<div class="tab-nav" id="tabnav">
+  <button class="tab-btn active" data-tab="dashboard"><span class="tab-dot"></span>Dashboard NOC</button>
+  <button class="tab-btn" data-tab="turno"><span class="tab-dot"></span>Entrega de Turno</button>
+  <button class="tab-btn" data-tab="registro"><span class="tab-dot"></span>Registro &amp; Analítica</button>
 </div>
 
-<div id="toast" style="position:fixed; bottom:80px; right:24px; padding:12px 20px; border-radius:10px; color:#fff; display:none; z-index:10001; font-weight:600"></div>
+<!-- ═══ DASHBOARD ═══ -->
+<div class="tab-panel active" id="panel-dashboard">
+  <div class="hdr">
+    <div class="hdr-l">
+      <div class="logo"><svg viewBox="0 0 26 26" fill="none"><circle cx="13" cy="13" r="3.5" fill="#0D0D0D"/><path d="M13 7 Q16.5 10 16.5 13 Q16.5 16 13 19" stroke="#0D0D0D" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M13 7 Q9.5 10 9.5 13 Q9.5 16 13 19" stroke="#0D0D0D" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M13 3 Q19.5 7 19.5 13 Q19.5 19 13 23" stroke="#0D0D0D" stroke-width="1.5" stroke-linecap="round" fill="none" opacity=".55"/><path d="M13 3 Q6.5 7 6.5 13 Q6.5 19 13 23" stroke="#0D0D0D" stroke-width="1.5" stroke-linecap="round" fill="none" opacity=".55"/></svg></div>
+      <div><div class="brand">FIBRA<span>ZO</span> — NOC</div><div class="brand-sub">Centro de Operaciones de Red · Informe Ejecutivo Diario</div></div>
+    </div>
+    <div class="hdr-r">
+      <div class="hdr-date" id="hdrDate">—</div>
+      <div class="hdr-time">07:45 AM (COT) · mduque@fibrazo.com</div>
+      <div class="hdr-clock" id="liveClock">—</div>
+      <div class="chip chip-r"><span class="pd"></span>Atención requerida</div>
+    </div>
+  </div>
+  <div class="rbar">
+    <div class="rbar-l"><div class="ldot"></div><span>Datos en tiempo real desde Gmail</span><span id="lastUpd" style="font-size:11px;color:var(--t3)">· Cargando…</span></div>
+    <button class="rbtn" id="btn-refresh">↻ Actualizar ahora</button>
+  </div>
+  <div class="kgrid">
+    <div class="kpi" style="--kc:#EF9F27"><div class="kpi-l">Tickets ODOO</div><div class="kpi-v">11</div><div class="kpi-s">4 activos · 7 resueltos</div></div>
+    <div class="kpi" style="--kc:#EF4444"><div class="kpi-l">Canales TV caídos</div><div class="kpi-v">4</div><div class="kpi-s">de 62 monitoreados</div></div>
+    <div class="kpi" style="--kc:#EF4444"><div class="kpi-l">Alertas BitNinja</div><div class="kpi-v">2</div><div class="kpi-s">IPs comprometidas (48h)</div></div>
+    <div class="kpi" style="--kc:#1DB954"><div class="kpi-l">MOPs activos</div><div class="kpi-v">1</div><div class="kpi-s">Próximo: lun 16 · 4 AM</div></div>
+    <div class="kpi" style="--kc:#3B82F6"><div class="kpi-l">Liberty / C&amp;W</div><div class="kpi-v">1</div><div class="kpi-s">Acción pendiente</div></div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="ch"><div class="chl"><div class="ci" style="background:#FEF3C7">📋</div><span class="ct">Tickets ODOO — Hoy</span></div><span class="bdg by">3 masivos</span></div>
+      <div class="cb">
+        <div class="bnr bnr-r">⚠ CAR-OLT03 Barranquilla: 38 horas sin resolver</div>
+        <table class="tbl"><tr><th>Ticket</th><th>Sitio</th><th>Estado</th><th>SLA</th></tr>
+        <tr><td><strong>#289192</strong></td><td>PER-OLT01 · Ctg Perimetral</td><td><span class="bdg br">Nuevo</span></td><td>0h 40m</td></tr>
+        <tr><td><strong>#289158</strong></td><td>Autodiagnóstico</td><td><span class="bdg br">Nuevo</span></td><td>4h 16m</td></tr>
+        <tr><td><strong>#289184</strong></td><td>SMR-OLT01 · Santa Marta</td><td><span class="bdg bg">Resuelto</span></td><td>0h 31m</td></tr>
+        <tr><td><strong>#288980</strong></td><td>CAR-OLT03 · Barranquilla</td><td><span class="bdg bg">Resuelto</span></td><td><strong style="color:#EF4444">38h 10m ⚠</strong></td></tr>
+        <tr><td><strong>#289136</strong></td><td>POZ-OLT01 · Ctg Pozón</td><td><span class="bdg bg">Resuelto</span></td><td>10h 53m</td></tr></table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ch"><div class="chl"><div class="ci" style="background:#EDE9FE">👤</div><span class="ct">Mis tickets asignados</span></div><span class="bdg bp">5 activos</span></div>
+      <div class="cb">
+        <div class="bnr bnr-y">2 tickets nuevos asignados el 13 de marzo</div>
+        <table class="tbl"><tr><th>Ticket</th><th>Descripción</th><th>Tipo</th><th>Fecha</th></tr>
+        <tr><td><strong>#289045</strong></td><td>Problemas de velocidad · Ong1</td><td><span class="bdg bn">Soporte</span></td><td>13 mar</td></tr>
+        <tr><td><strong>#288997</strong></td><td>Modernización Redes Metro MON</td><td><span class="bdg bb">Solicitud</span></td><td>13 mar</td></tr>
+        <tr><td><strong>#287767</strong></td><td>Temperatura alta · Switch Fabric</td><td><span class="bdg bb">Infraestr.</span></td><td>6 mar</td></tr>
+        <tr><td><strong>#287730</strong></td><td>Falla canales de TV</td><td><span class="bdg by">Falla</span></td><td>6 mar</td></tr></table>
+      </div>
+    </div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="ch"><div class="chl"><div class="ci" style="background:#D1FAE5">📺</div><span class="ct">Monitor TV — Parrilla Fibrazo</span></div><span class="bdg bn">62 canales</span></div>
+      <div class="cb">
+        <div style="display:flex;gap:7px;margin-bottom:12px"><span class="bdg bg" style="padding:3px 9px">50 OK</span><span class="bdg by" style="padding:3px 9px">8 WARN</span><span class="bdg br" style="padding:3px 9px">4 DOWN</span></div>
+        <div class="slbl">Canales caídos</div>
+        <div class="ub"><span class="ubn">Canal AZ Corazón</span><div class="ubt"><div class="ubf" style="width:50%;background:#EF4444"></div></div><span class="ubp" style="color:#EF4444">50%</span><span class="bdg br">DOWN</span></div>
+        <div class="ub"><span class="ubn">RedBull TV</span><div class="ubt"><div class="ubf" style="width:93%;background:#F59E0B"></div></div><span class="ubp" style="color:#92400E">93%</span><span class="bdg br">DOWN</span></div>
+        <div class="ub"><span class="ubn">SomosCine</span><div class="ubt"><div class="ubf" style="width:98%;background:#F59E0B"></div></div><span class="ubp">98%</span><span class="bdg br">DOWN</span></div>
+        <div class="slbl">Advertencias</div>
+        <div class="ub"><span class="ubn">Canal Capital</span><div class="ubt"><div class="ubf" style="width:86%;background:#FCD34D"></div></div><span class="ubp" style="color:#92400E">86%</span><span class="bdg by">WARN</span></div>
+        <div class="ub"><span class="ubn">La Mega Mundial</span><div class="ubt"><div class="ubf" style="width:88%;background:#FCD34D"></div></div><span class="ubp" style="color:#92400E">88%</span><span class="bdg by">WARN</span></div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card">
+        <div class="ch"><div class="chl"><div class="ci" style="background:#FEE2E2">🛡️</div><span class="ct">Seguridad — BitNinja</span></div><span class="bdg br">Patrón activo</span></div>
+        <div class="cb">
+          <div class="bnr bnr-r">Bloque 77.247.120.x — 21 IPs desde nov 2025</div>
+          <table class="tbl"><tr><th>IP</th><th>Fecha / Hora</th><th></th></tr>
+          <tr><td><span class="ipc">77.247.120.128</span></td><td>14 mar · 08:30</td><td><span class="bdg br">Hoy</span></td></tr>
+          <tr><td><span class="ipc">77.247.120.146</span></td><td>13 mar · 17:08</td><td><span class="bdg by">Ayer</span></td></tr></table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ch"><div class="chl"><div class="ci" style="background:#DBEAFE">🌐</div><span class="ct">Liberty / C&amp;W</span></div><span class="bdg by">Acción pendiente</span></div>
+        <div class="cb">
+          <div style="font-size:13px;font-weight:700;margin-bottom:4px">Ticket #893170 · DEGRADACIÓN CI1033988</div>
+          <div style="font-size:12px;color:var(--t2);margin-bottom:9px">Fibrazo Montería R2 · Abierto: 24 feb · <strong style="color:#92400E">~18 días</strong></div>
+          <div class="bnr bnr-y" style="margin-bottom:0">⚠ Pendiente: clareado solicitado por C&W.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:12px">
+    <div class="ch"><div class="chl"><div class="ci" style="background:#D1FAE5">🔧</div><span class="ct">MOPs — Operaciones programadas</span></div><span class="bdg bg">1 próximo</span></div>
+    <div class="cb">
+      <div class="g3">
+        <div><div class="slbl" style="margin-top:0">Próximo</div><div class="mi"><div class="md" style="background:#F59E0B"></div><div><div class="mt">Intercambio de Board · POP OLT 1</div><div class="mm">La Popa, Cartagena</div><div style="margin-top:4px;display:flex;gap:5px;align-items:center"><span class="bdg bg">Aprobado</span><span style="font-size:11px;font-weight:700">Lun 16 · 4:00 AM</span></div><div class="mm">Alberto Muñoz · 13 mar</div></div></div></div>
+        <div><div class="slbl" style="margin-top:0">Ejecutados</div>
+          <div class="mi"><div class="md" style="background:#1DB954"></div><div><div class="mt">MOP-Prueba PI</div><div class="mm">13 mar · <span style="color:#15883C;font-weight:600">Exitoso</span></div></div></div>
+          <div class="mi"><div class="md" style="background:#1DB954"></div><div><div class="mt">Adición enlace EVA-OLT01</div><div class="mm">10 mar · <span style="color:#15883C;font-weight:600">Exitoso</span></div></div></div>
+        </div>
+        <div><div class="slbl" style="margin-top:0">Equipo POP OLT 1</div><div style="font-size:12px;color:var(--t2);line-height:2"><strong style="color:var(--t1)">Coord:</strong> Laura C. Paez<br><strong style="color:var(--t1)">Supervisores:</strong> S. Amaya · D. Acosta<br><strong style="color:var(--t1)">Técnicos:</strong> N. Vara · M. Bustamante</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="conc">
+    <div class="conci">
+      <div class="conch">⏱ Conclusiones y acciones del día</div>
+      <div class="concc">
+        <div class="concb"><div class="conct">Prioridades inmediatas</div>
+          <div class="concit"><div class="concn" style="background:#EF4444">1</div><div class="conctx"><strong>Liberty/C&W #893170:</strong> Realizar clareado en Montería R2. 18 días abierto.</div></div>
+          <div class="concit"><div class="concn" style="background:#EF4444">2</div><div class="conctx"><strong>Canal AZ Corazón:</strong> Uptime 50% — contactar proveedor. CDN1 y CDN2 afectados.</div></div>
+          <div class="concit"><div class="concn" style="background:#EF4444">3</div><div class="conctx"><strong>BitNinja 77.247.120.x:</strong> Auditoría de tráfico + filtrado en firewall perimetral.</div></div>
+        </div>
+        <div class="concb"><div class="conct">Acciones planificadas</div>
+          <div class="concit"><div class="concn" style="background:#F59E0B">4</div><div class="conctx"><strong>MOP POP OLT 1 — lunes 16 · 4 AM:</strong> Confirmar equipo y acceso al edificio.</div></div>
+          <div class="concit"><div class="concn" style="background:#F59E0B">5</div><div class="conctx"><strong>Tickets #289045 y #288997:</strong> Gestionar antes del cierre de semana.</div></div>
+          <div class="concit"><div class="concn" style="background:#1DB954">6</div><div class="conctx"><strong>SLA CAR-OLT03:</strong> Documentar 38h y revisar con el equipo.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ftr"><span class="ftr-l" id="footerTs">Generado automáticamente · Gmail en tiempo real</span><span class="ftr-r">Marlon Duque · Jefe NOC · Fibrazo</span></div>
+</div>
+
+<!-- ═══ ENTREGA DE TURNO ═══ -->
+<div class="tab-panel" id="panel-turno">
+  <div class="thdr">
+    <div class="thi">
+      <div><div class="thtit">Entrega de <span>Turno</span></div><div class="thsub">NOC Fibrazo · Registro oficial por turno</div></div>
+      <div class="tflds">
+        <div class="tfg"><span class="tfl">Ingeniero</span>
+          <select class="tfs" id="sel-ing" style="min-width:150px">
+            <option value="">Seleccionar...</option>
+            <option>Jhon Lopez</option><option>Joseph Montenegro</option><option>Jack Osma</option>
+            <option>Durbey Toro</option><option>Facundo Oliva 🇦🇷</option><option>Luisa Benitez</option>
+          </select>
+        </div>
+        <div class="tfg"><span class="tfl">Turno</span>
+          <select class="tfs" id="sel-turno" style="min-width:145px">
+            <option>06:00 - 12:00</option><option>12:00 - 18:00</option>
+            <option>18:00 - 00:00</option><option>00:00 - 06:00</option>
+          </select>
+          <span class="warn-txt" id="turno-warn">⚠ Solo turnos diurnos</span>
+        </div>
+        <div class="tfg"><span class="tfl">Fecha</span><input type="date" class="tfs" id="sel-fecha" style="min-width:140px"></div>
+        <div class="tfg"><span class="tfl">Lugar</span><select class="tfs" id="sel-lugar" style="min-width:110px"><option>Oficina</option><option>Remoto</option></select></div>
+      </div>
+    </div>
+  </div>
+  <div class="tkr">
+    <div class="tkpi" style="--tc:#EF9F27"><div class="tkl">Issues del turno</div><input class="kedit" style="--tc:#EF9F27" type="number" value="2" min="0" id="kpi-issues"><div class="tks">incidentes activos</div></div>
+    <div class="tkpi" style="--tc:#EF4444"><div class="tkl">Tickets en bandeja</div><input class="kedit" style="--tc:#EF4444" type="number" value="49" min="0" id="kpi-bandeja"><div class="tks">en cola ODOO</div></div>
+    <div class="tkpi" style="--tc:#3B82F6"><div class="tkl">Fallas de TV</div><input class="kedit" style="--tc:#3B82F6" type="number" value="10" min="0" id="kpi-tv"><div class="tks">canales afectados</div></div>
+    <div class="tkpi" style="--tc:#1DB954"><div class="tkl">Auditorías</div><input class="kedit" style="--tc:#1DB954" type="number" value="0" min="0" id="kpi-aud"><div class="tks">realizadas en turno</div></div>
+  </div>
+  <!-- Card descripción -->
+  <div class="card" style="margin-bottom:12px;border:2px solid var(--g)">
+    <div class="ch" style="background:var(--bk);border-radius:10px 10px 0 0">
+      <div class="chl"><div class="ci" style="background:var(--g);font-size:14px">📢</div><span class="ct" style="color:#fff;font-size:14px">Descripción de entrega — <span id="ing-disp" style="color:var(--g)">Selecciona ingeniero</span></span></div>
+      <span style="font-size:10px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase">VISIBLE PARA EL PRÓXIMO TURNO</span>
+    </div>
+    <div class="cb" style="background:linear-gradient(135deg,#fafffe,#f0fdf4)">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <div style="font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;margin-bottom:6px">Estado general del turno</div>
+          <div style="display:flex;gap:6px;margin-bottom:10px">
+            <span id="est-v" data-est="verde" style="padding:5px 12px;border-radius:20px;border:2px solid #E5E7EB;font-size:12px;font-weight:600;cursor:pointer;background:#fff;color:#6B7280">Sin novedades</span>
+            <span id="est-a" data-est="amarillo" style="padding:5px 12px;border-radius:20px;border:2px solid #E5E7EB;font-size:12px;font-weight:600;cursor:pointer;background:#fff;color:#6B7280">Con seguimiento</span>
+            <span id="est-r" data-est="rojo" style="padding:5px 12px;border-radius:20px;border:2px solid #E5E7EB;font-size:12px;font-weight:600;cursor:pointer;background:#fff;color:#6B7280">Alerta crítica</span>
+          </div>
+          <div style="font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;margin-bottom:5px">Resumen ejecutivo</div>
+          <textarea id="desc-ent" class="fta" style="min-height:85px;font-size:13px;border:2px solid var(--g);background:#fff" placeholder="Ej: 4 masivos activos en Santa Marta. Canal AZ Corazón 50% uptime..."></textarea>
+        </div>
+        <div>
+          <div style="font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;margin-bottom:6px">Acciones críticas para el siguiente turno</div>
+          <div id="acc-criticas">
+            <div class="ar" style="border-bottom:1px solid var(--bd);padding:5px 0">
+              <div style="width:7px;height:7px;border-radius:50%;background:#EF4444;flex-shrink:0"></div>
+              <input class="fii" style="flex:1;font-size:12px" value="Verificar resolución masivos SMR-OLT01 y PER-OLT01">
+              <button data-rm="1" style="border:none;background:none;color:var(--t3);cursor:pointer;font-size:15px">×</button>
+            </div>
+            <div class="ar" style="padding:5px 0">
+              <div style="width:7px;height:7px;border-radius:50%;background:#F59E0B;flex-shrink:0"></div>
+              <input class="fii" style="flex:1;font-size:12px" value="Responder C&W ticket #893170 - Montería R2">
+              <button data-rm="1" style="border:none;background:none;color:var(--t3);cursor:pointer;font-size:15px">×</button>
+            </div>
+          </div>
+          <button class="addbtn" id="btn-add-accion" style="margin-top:5px">+ Agregar acción</button>
+          <div style="margin-top:9px;padding:8px 10px;background:var(--bk);border-radius:8px">
+            <div style="font-size:10px;font-weight:700;color:var(--g);text-transform:uppercase;margin-bottom:4px">Tickets resueltos en este turno</div>
+            <textarea id="tkt-res" class="fta" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.12);color:#fff;min-height:46px;font-size:11px" placeholder="#ID1, #ID2..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="g2">
+    <div>
+      <div class="acc open" id="a-masivos">
+        <div class="ach" data-acc="a-masivos"><div class="achl"><div class="acai" style="background:#FEE2E2">🔴</div>Fallas masivas<span class="bdg br" id="cnt-mas" style="font-size:10px;padding:2px 7px;border-radius:10px">4</span></div><span class="acar">▼</span></div>
+        <div class="acb"><div id="lst-mas">
+          <div class="ir sc"><div class="is"></div><div class="id">MASIVO | SMR-OLT03 BOARD 2 PUERTOS 4·5·6 | SANTA MARTA<small>16/03 · 06:30 COT</small></div><a href="https://fibrazo.odoo.com" target="_blank" class="iti">#267968</a><span class="bdg br">Activo</span></div>
+          <div class="ir sc"><div class="is"></div><div class="id">Masivo | SMR-OLT01 Board 05 Port 07 | Santa Marta<small>16/03 · 06:45 COT</small></div><a href="https://fibrazo.odoo.com" target="_blank" class="iti">#263648</a><span class="bdg br">Activo</span></div>
+          <div class="ir sc"><div class="is"></div><div class="id">Masivo | EVA-OLT01 Board 13 Puerto 12 | Barranquilla<small>16/03 · 07:00 COT</small></div><a href="https://fibrazo.odoo.com" target="_blank" class="iti">#280078</a><span class="bdg br">Activo</span></div>
+          <div class="ir sc"><div class="is"></div><div class="id">MASIVO | SMR-OLT01 Board 5 Puerto 5 | Santa Marta<small>16/03 · 07:15 COT</small></div><a href="https://fibrazo.odoo.com" target="_blank" class="iti">#270152</a><span class="bdg br">Activo</span></div>
+        </div><button class="addbtn" id="btn-add-mas">+ Agregar incidente crítico</button></div>
+      </div>
+      <div class="acc open" id="a-menores">
+        <div class="ach" data-acc="a-menores"><div class="achl"><div class="acai" style="background:#FEF3C7">🟡</div>Fallas menores<span class="bdg by" id="cnt-men" style="font-size:10px;padding:2px 7px;border-radius:10px">3</span></div><span class="acar">▼</span></div>
+        <div class="acb"><div id="lst-men">
+          <div class="ir sh"><div class="is"></div><div class="id">Falla AC COMERCIAL | NODO POPA<small>16/03 · En seguimiento</small></div><a href="#" class="iti">#285379</a><span class="bdg by">Seguimiento</span></div>
+          <div class="ir sh"><div class="is"></div><div class="id">Cambio Mikrotik MK-CTG-07 IPV6<small>16/03 · Programado</small></div><a href="#" class="iti">#289390</a><span class="bdg bn">Prog.</span></div>
+          <div class="ir"><div class="is" style="background:#9AA0AB"></div><div class="id">FALLA | CANALES DE TV | Nacionales<small>16/03 · Monitoreando</small></div><a href="#" class="iti">#287730</a><span class="bdg bb">Monitor</span></div>
+        </div><button class="addbtn" id="btn-add-men">+ Agregar falla menor</button></div>
+      </div>
+      <div class="acc" id="a-alarmas">
+        <div class="ach" data-acc="a-alarmas"><div class="achl"><div class="acai" style="background:#EDE9FE">🔔</div>Alarmas recurrentes<span class="bdg bp" style="font-size:10px;padding:2px 7px;border-radius:10px">2</span></div><span class="acar">▼</span></div>
+        <div class="acb"><div id="lst-alm">
+          <div class="ar"><div style="width:7px;height:7px;border-radius:50%;background:#F59E0B;flex-shrink:0"></div><div style="flex:1;font-size:12px">ICPM ping | MK-PUJ-01 - MK-ONG-01</div><a href="#" class="iti">#275571</a></div>
+          <div class="ar"><div style="width:7px;height:7px;border-radius:50%;background:#EF4444;flex-shrink:0"></div><div style="flex:1;font-size:12px">Temperatura alta Switch Fabric Core</div><a href="#" class="iti">#287767</a></div>
+        </div><button class="addbtn" id="btn-add-alm">+ Agregar alarma</button></div>
+      </div>
+    </div>
+    <div>
+      <div class="acc open" id="a-pend">
+        <div class="ach" data-acc="a-pend"><div class="achl"><div class="acai" style="background:#FEF3C7">📌</div>Pendientes a realizar</div><span class="acar">▼</span></div>
+        <div class="acb"><div id="lst-pend">
+          <div class="ar"><input type="checkbox" style="accent-color:var(--g);flex-shrink:0"><input class="fii" style="flex:1" value="Verificar MOP POP OLT 1 para hoy 4AM"><button data-rm="1" style="border:none;background:none;color:var(--t3);cursor:pointer;font-size:14px">×</button></div>
+          <div class="ar"><input type="checkbox" style="accent-color:var(--g);flex-shrink:0"><input class="fii" style="flex:1" value="Responder C&W #893170 - clareado pendiente"><button data-rm="1" style="border:none;background:none;color:var(--t3);cursor:pointer;font-size:14px">×</button></div>
+        </div><button class="addbtn" id="btn-add-pend">+ Agregar pendiente</button></div>
+      </div>
+      <div class="acc open" id="a-obs">
+        <div class="ach" data-acc="a-obs"><div class="achl"><div class="acai" style="background:#E8F8EE">📝</div>Observaciones del turno</div><span class="acar">▼</span></div>
+        <div class="acb" style="padding:0">
+          <div style="background:var(--bk);padding:12px 14px">
+            <div style="font-family:var(--fh);font-size:11px;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px">Mensaje para el siguiente turno</div>
+            <textarea id="obs-msg" class="fta" style="background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.12);color:#fff;min-height:75px">Sin novedades adicionales.</textarea>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:7px">
+              <span style="font-size:10px;color:rgba(255,255,255,.3)" id="obs-cnt">0 caracteres</span>
+              <div style="display:flex;gap:5px">
+                <button data-tpl="normal" style="font-size:10px;padding:3px 7px;border-radius:5px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.5);cursor:pointer">Sin novedades</button>
+                <button data-tpl="alerta" style="font-size:10px;padding:3px 7px;border-radius:5px;border:1px solid rgba(239,68,68,.4);background:transparent;color:#EF4444;cursor:pointer">Con alertas</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="padding:12px 14px">
+        <div style="font-family:var(--fh);font-size:13px;font-weight:700;margin-bottom:10px">🔗 Recursos rápidos</div>
+        <a href="https://fibrazo.odoo.com/odoo/helpdesk" target="_blank" class="ql"><div class="qli" style="background:#FEF3C7">🎫</div><div><div class="qlt">ODOO Helpdesk</div><div class="qls">fibrazo.odoo.com</div></div></a>
+        <a href="#" class="ql"><div class="qli" style="background:#EDE9FE">🦗</div><div><div class="qlt">KRILL CPE</div><div class="qls">Monitoreo CPE</div></div></a>
+        <a href="#" class="ql"><div class="qli" style="background:#D1FAE5">📺</div><div><div class="qlt">NOC Estado TV Fibrazo</div><div class="qls">AppSheet</div></div></a>
+      </div>
+    </div>
+  </div>
+  <div class="acc" id="a-hist">
+    <div class="ach" data-acc="a-hist"><div class="achl"><div class="acai" style="background:#F3F4F6">🕐</div>Historial de turnos recientes</div><span class="acar">▼</span></div>
+    <div class="acb">
+      <div class="hchips" id="hist-chips">
+        <div class="hchip"><b>Jhon Lopez</b> · 15 mar · 06:00-12:00 · 3 issues</div>
+        <div class="hchip"><b>Joseph Montenegro</b> · 15 mar · 12:00-18:00 · 1 issue</div>
+        <div class="hchip"><b>Durbey Toro</b> · 14 mar · 18:00-00:00 · 2 issues</div>
+        <div class="hchip"><b>Luisa Benitez</b> · 14 mar · 06:00-12:00 · 5 issues</div>
+        <div class="hchip"><b>Facundo Oliva 🇦🇷</b> · 14 mar · 00:00-06:00 · 2 issues</div>
+      </div>
+    </div>
+  </div>
+  <div class="tact">
+    <div class="tact-l"><span id="tsum">📋 Completa el formulario y guarda para registrar el turno.</span></div>
+    <div style="display:flex;gap:7px">
+      <button class="btns" id="btn-clear">✕ Limpiar</button>
+      <button class="btnp" id="btn-guardar">✓ Guardar turno</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ REGISTRO & ANALÍTICA ═══ -->
+<div class="tab-panel" id="panel-registro">
+  <div class="thdr" style="margin-bottom:12px">
+    <div class="thi">
+      <div><div class="thtit">Registro &amp; <span>Analítica</span></div><div class="thsub">Historial de turnos · Horas laboradas · Festivos CO &amp; AR</div></div>
+      <div class="tflds">
+        <div class="tfg"><span class="tfl">Período</span><select class="tfs" id="reg-per" style="min-width:130px"><option value="semana">Esta semana</option><option value="mes" selected>Este mes</option><option value="trimestre">Trimestre</option></select></div>
+        <div class="tfg"><span class="tfl">Ingeniero</span><select class="tfs" id="reg-ing" style="min-width:150px"><option value="todos">Todos</option><option>Jhon Lopez</option><option>Joseph Montenegro</option><option>Jack Osma</option><option>Durbey Toro</option><option>Facundo Oliva 🇦🇷</option><option>Luisa Benitez</option></select></div>
+      </div>
+    </div>
+  </div>
+  <div class="tkr">
+    <div class="tkpi" style="--tc:#1DB954"><div class="tkl">Horas en turno (mes)</div><div class="tkv">144</div><div class="tks">horas registradas</div></div>
+    <div class="tkpi" style="--tc:#F59E0B"><div class="tkl">Turnos nocturnos</div><div class="tkv">8</div><div class="tks">19:00–05:59 COT</div></div>
+    <div class="tkpi" style="--tc:#EF4444"><div class="tkl">Festivos laborados</div><div class="tkv">3</div><div class="tks">Colombia / Argentina</div></div>
+    <div class="tkpi" style="--tc:#3B82F6"><div class="tkl">Fines de semana</div><div class="tkv">10</div><div class="tks">sábados y domingos</div></div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="ch"><div class="chl"><div class="ci" style="background:#D1FAE5">📊</div><span class="ct">Horas por ingeniero</span></div><span class="bdg bg">Marzo 2026</span></div>
+      <div class="cb"><div style="position:relative;height:250px"><canvas id="chart-h"></canvas></div></div>
+    </div>
+    <div class="card">
+      <div class="ch"><div class="chl"><div class="ci" style="background:#DBEAFE">🕐</div><span class="ct">Distribución de turnos</span></div><span class="bdg bb">Por franja horaria</span></div>
+      <div class="cb">
+        <div style="position:relative;height:200px"><canvas id="chart-t"></canvas></div>
+        <div id="chart-leg" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;justify-content:center"></div>
+      </div>
+    </div>
+  </div>
+  <div class="acc open" id="a-fest">
+    <div class="ach" data-acc="a-fest"><div class="achl"><div class="acai" style="background:#FEE2E2">🗓️</div>Festivos próximos — Colombia 🇨🇴 &amp; Argentina 🇦🇷<span class="bdg br" style="font-size:10px;padding:2px 7px;border-radius:10px">Mar–Abr 2026</span></div><span class="acar">▼</span></div>
+    <div class="acb" style="padding:0">
+      <table class="tbl" style="margin:0"><tr><th>Fecha</th><th>Festivo</th><th>País</th><th>Aplica a</th><th>Tipo</th></tr>
+      <tr style="background:#FEF8F8"><td><strong>20 mar 2026</strong></td><td>Día de San José</td><td><span class="bdg br">🇨🇴 CO</span></td><td>Jhon, Joseph, Jack, Durbey, Luisa</td><td><span class="bdg by">Recargo festivo</span></td></tr>
+      <tr><td><strong>24 mar 2026</strong></td><td>Día de la Memoria (AR)</td><td><span class="bdg bb">🇦🇷 AR</span></td><td>Facundo Oliva</td><td><span class="bdg by">Recargo festivo AR</span></td></tr>
+      <tr style="background:#FEF8F8"><td><strong>2 abr 2026</strong></td><td>Jueves Santo</td><td><span class="bdg br">🇨🇴 CO</span></td><td>Jhon, Joseph, Jack, Durbey, Luisa</td><td><span class="bdg by">Recargo festivo</span></td></tr>
+      <tr><td><strong>3 abr 2026</strong></td><td>Viernes Santo</td><td><span style="display:flex;gap:3px"><span class="bdg br">🇨🇴</span><span class="bdg bb">🇦🇷</span></span></td><td>Todo el equipo</td><td><span class="bdg br">Ambos países</span></td></tr>
+      <tr style="background:#FEF8F8"><td><strong>20 abr 2026</strong></td><td>Lunes Pascua AR</td><td><span class="bdg bb">🇦🇷 AR</span></td><td>Facundo Oliva</td><td><span class="bdg by">Recargo festivo AR</span></td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <div class="ch"><div class="chl"><div class="ci" style="background:#F3F4F6">📋</div><span class="ct">Registro de turnos</span></div><div style="display:flex;gap:7px;align-items:center"><a href="https://docs.google.com/spreadsheets/d/1noB-qlC_eQjMdw_z_fNaZ4YscielNoWp1mH7PC7MSjA/edit" target="_blank" class="btns" style="font-size:11px;padding:4px 10px;text-decoration:none">📊 Ver en Sheets</a><span class="bdg bn" id="reg-cnt">4 registros</span></div></div>
+    <div class="cb" style="padding:0">
+      <table class="tbl" id="reg-tbl">
+        <tr><th>Fecha</th><th>Ingeniero</th><th>Turno</th><th>Tipo</th><th>Issues</th><th>TV</th><th>Festivo</th><th>Observación</th></tr>
+        <tr><td>16/03</td><td><strong>Jhon Lopez</strong></td><td>06:00–12:00</td><td><span class="bdg bn">Diurno</span></td><td>4</td><td>10</td><td>—</td><td style="font-size:11px;color:var(--t2)">4 masivos SMR y CTG. AC Nodo Popa sin resolver.</td></tr>
+        <tr style="background:#FAFBFC"><td>15/03</td><td><strong>Luisa Benitez</strong></td><td>18:00–00:00</td><td><span class="bdg bp">Nocturno</span></td><td>2</td><td>8</td><td>—</td><td style="font-size:11px;color:var(--t2)">Caída CAR-OLT03 escalada.</td></tr>
+        <tr><td>15/03</td><td><strong>Facundo Oliva 🇦🇷</strong></td><td>00:00–06:00</td><td><span class="bdg by">Nocturno</span></td><td>1</td><td>6</td><td>—</td><td style="font-size:11px;color:var(--t2)">Turno tranquilo. ONU reincorporada.</td></tr>
+        <tr style="background:#FEF8F8"><td>15/03</td><td><strong>Durbey Toro</strong></td><td>12:00–18:00</td><td><span class="bdg bn">Diurno</span></td><td>3</td><td>7</td><td>—</td><td style="font-size:11px;color:var(--t2)">MOP Prueba PI OK. BitNinja 2 alertas.</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="bnr bnr-g" style="margin-top:12px">📊 Datos sincronizan con <strong>Parrilla Turnos NOC</strong> en Google Sheets. <a href="https://docs.google.com/spreadsheets/d/1noB-qlC_eQjMdw_z_fNaZ4YscielNoWp1mH7PC7MSjA/edit?gid=943183105" target="_blank" style="color:var(--gd);font-weight:700;margin-left:4px">Abrir hoja →</a></div>
+</div>
+
+</div><!-- /wrap -->
+
+<div id="toast" style="position:fixed;bottom:24px;right:24px;padding:11px 18px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.2);display:none;max-width:340px;color:#fff"></div>
 
 <script>
-    const CONFIG = {
-        ingenierosSinNoche: ['Joseph Montenegro'],
-        autoSaveKey: 'noc_dashboard_draft'
-    };
+var estAct = '';
+var chH = null, chT = null;
+var SIN_NOCHE = ['Joseph Montenegro'];
 
-    // --- RELOJ ---
-    function updateClock() {
-        const now = new Date();
-        document.getElementById('hdrDate').textContent = now.toLocaleDateString('es-CO', { weekday: 'long', day: 'numeric', month: 'long' });
-        document.getElementById('liveClock').textContent = now.toLocaleTimeString('es-CO') + ' COT';
-    }
-    setInterval(updateClock, 1000); updateClock();
+// ── RELOJ ──
+function tick() {
+  var n = new Date();
+  var el = document.getElementById('hdrDate');
+  if (el) el.textContent = n.toLocaleDateString('es-CO',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  var cl = document.getElementById('liveClock');
+  if (cl) cl.textContent = n.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',second:'2-digit'}) + ' COT';
+}
+tick(); setInterval(tick, 1000);
+(function() {
+  var n = new Date();
+  var lu = document.getElementById('lastUpd');
+  if (lu) lu.textContent = '· ' + n.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'}) + ' COT';
+  var ft = document.getElementById('footerTs');
+  if (ft) ft.textContent = 'Actualizado: ' + n.toLocaleDateString('es-CO') + ' ' + n.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
+})();
 
-    // --- NAVEGACIÓN ---
-    function switchTab(tabId, btn) {
-        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('panel-' + tabId).classList.add('active');
-        btn.classList.add('active');
-    }
+// ── TABS ──
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+  var panel = document.getElementById('panel-'+id);
+  if (panel) panel.classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (id === 'registro') setTimeout(initCharts, 80);
+}
 
-    // --- LÓGICA DE FORMULARIO ---
-    function onIngChange() {
-        const ing = document.getElementById('sel-ing').value;
-        const selTurno = document.getElementById('sel-turno');
-        const turnosDiurnos = ['06:00 - 12:00', '12:00 - 18:00'];
-        const turnosNocturnos = ['18:00 - 00:00', '00:00 - 06:00'];
-        
-        selTurno.innerHTML = '';
-        const lista = CONFIG.ingenierosSinNoche.includes(ing) ? turnosDiurnos : [...turnosDiurnos, ...turnosNocturnos];
-        lista.forEach(t => {
-            const opt = document.createElement('option');
-            opt.value = opt.textContent = t;
-            selTurno.appendChild(opt);
-        });
-        document.getElementById('ing-disp').textContent = ing || 'Selecciona ingeniero';
-        updateSummary();
-        saveDraft();
-    }
+// ── ACCORDION ──
+function toggleAcc(id) {
+  var el = document.getElementById(id);
+  if (el) el.classList.toggle('open');
+}
 
-    function updateSummary() {
-        const ing = document.getElementById('sel-ing').value || '...';
-        const issues = document.getElementById('kpi-issues').value;
-        document.getElementById('tsum').textContent = `${ing} | Issues: ${issues}`;
-    }
+// ── ESTADO SEMÁFORO ──
+function setEstado(e) {
+  estAct = e;
+  var cols = {verde:{bg:'#D1FAE5',c:'#065F46',b:'#1DB954'},amarillo:{bg:'#FEF3C7',c:'#92400E',b:'#F59E0B'},rojo:{bg:'#FEE2E2',c:'#991B1B',b:'#EF4444'}};
+  [{id:'est-v',k:'verde'},{id:'est-a',k:'amarillo'},{id:'est-r',k:'rojo'}].forEach(function(x){
+    var el = document.getElementById(x.id); if (!el) return;
+    if (x.k === e) { el.style.background=cols[e].bg; el.style.color=cols[e].c; el.style.borderColor=cols[e].b; }
+    else { el.style.background='#fff'; el.style.color='#6B7280'; el.style.borderColor='#E5E7EB'; }
+  });
+}
 
-    // --- AUTO-GUARDADO ---
-    function saveDraft() {
-        const draft = {
-            ing: document.getElementById('sel-ing').value,
-            desc: document.getElementById('desc-ent').value,
-            obs: document.getElementById('obs-msg').value,
-            fecha: document.getElementById('sel-fecha').value,
-            issues: document.getElementById('kpi-issues').value
-        };
-        localStorage.setItem(CONFIG.autoSaveKey, JSON.stringify(draft));
-    }
+// ── INGENIERO CHANGE ──
+function onIngChange() {
+  var ing = document.getElementById('sel-ing').value;
+  var sel = document.getElementById('sel-turno');
+  var warn = document.getElementById('turno-warn');
+  sel.innerHTML = '';
+  var d = [{v:'06:00 - 12:00'},{v:'12:00 - 18:00'}];
+  var n = [{v:'18:00 - 00:00'},{v:'00:00 - 06:00'}];
+  var lista = SIN_NOCHE.indexOf(ing) >= 0 ? d : d.concat(n);
+  lista.forEach(function(t){var o=document.createElement('option');o.value=t.v;o.textContent=t.v;sel.appendChild(o);});
+  if (warn) warn.style.display = SIN_NOCHE.indexOf(ing) >= 0 ? 'block' : 'none';
+  var nd = document.getElementById('ing-disp');
+  if (nd) nd.textContent = ing || 'Selecciona ingeniero';
+  updHeader();
+}
 
-    function loadDraft() {
-        const saved = localStorage.getItem(CONFIG.autoSaveKey);
-        if (saved) {
-            const data = JSON.parse(saved);
-            if (data.ing) { document.getElementById('sel-ing').value = data.ing; onIngChange(); }
-            document.getElementById('desc-ent').value = data.desc || '';
-            document.getElementById('obs-msg').value = data.obs || '';
-            document.getElementById('sel-fecha').value = data.fecha || '';
-            document.getElementById('kpi-issues').value = data.issues || 0;
-            updateSummary();
-        }
-    }
+function updHeader() {
+  var ing = (document.getElementById('sel-ing').value) || 'Sin asignar';
+  var turno = document.getElementById('sel-turno').value;
+  var issues = document.getElementById('kpi-issues').value;
+  var nd = document.getElementById('ing-disp');
+  if (nd) nd.textContent = ing;
+  var ts = document.getElementById('tsum');
+  if (ts) ts.textContent = ing + ' | ' + turno + ' | ' + issues + ' issue(s)';
+}
 
-    // --- WHATSAPP & TEMA ---
-    function copyForWhatsApp() {
-        const ing = document.getElementById('sel-ing').value || 'Ingeniero';
-        const turno = document.getElementById('sel-turno').value;
-        const issues = document.getElementById('kpi-issues').value;
-        const resumen = document.getElementById('desc-ent').value;
-        const texto = `*🟢 ENTREGA DE TURNO NOC*\n\n👤 *Ing:* ${ing}\n⏰ *Turno:* ${turno}\n🚨 *Issues:* ${issues}\n📝 *Resumen:* ${resumen || 'Sin novedades.'}`;
-        navigator.clipboard.writeText(texto).then(() => toast('¡Copiado para WhatsApp! 📱', '#1DB954'));
-    }
+// ── OBS TEMPLATE ──
+function obsTemplate(tipo) {
+  var ta = document.getElementById('obs-msg'); if (!ta) return;
+  if (tipo === 'normal') ta.value = 'Turno sin novedades. Sistema estable.';
+  else { var ing = document.getElementById('sel-ing').value || 'Ingeniero'; ta.value = ing + ' reporta:\n- Tickets activos pendientes.\n- Fallas de TV sin resolver.\n- Requiere seguimiento.'; }
+  updObsCnt();
+}
+function updObsCnt() {
+  var ta = document.getElementById('obs-msg');
+  var c = document.getElementById('obs-cnt');
+  if (ta && c) c.textContent = ta.value.length + ' caracteres';
+}
 
-    function toggleTheme() {
-        document.body.classList.toggle('dark-mode');
-        const isDark = document.body.classList.contains('dark-mode');
-        localStorage.setItem('noc_theme', isDark ? 'dark' : 'light');
-        toast(isDark ? 'Modo Noche 🌙' : 'Modo Día ☀️', '#333');
-    }
+// ── ADD ROWS ──
+function addMas() {
+  var l = document.getElementById('lst-mas'); if (!l) return;
+  var d = document.createElement('div'); d.className = 'ir sc';
+  d.innerHTML = '<div class="is"></div><div class="id"><input class="fii" style="width:100%" placeholder="Descripción..."></div><input class="fii" style="width:75px" placeholder="#ID"><select class="fss"><option>Activo</option><option>Resuelto</option></select>';
+  l.appendChild(d);
+  var c = document.getElementById('cnt-mas');
+  if (c) c.textContent = parseInt(c.textContent||0)+1;
+}
+function addMen() {
+  var l = document.getElementById('lst-men'); if (!l) return;
+  var d = document.createElement('div'); d.className = 'ir sh';
+  d.innerHTML = '<div class="is"></div><div class="id"><input class="fii" style="width:100%" placeholder="Descripción..."></div><input class="fii" style="width:75px" placeholder="#ID"><select class="fss"><option>Activo</option><option>Resuelto</option></select>';
+  l.appendChild(d);
+  var c = document.getElementById('cnt-men');
+  if (c) c.textContent = parseInt(c.textContent||0)+1;
+}
+function addAlm() {
+  var l = document.getElementById('lst-alm'); if (!l) return;
+  var d = document.createElement('div'); d.className = 'ar';
+  d.innerHTML = '<div style="width:7px;height:7px;border-radius:50%;background:#F59E0B;flex-shrink:0"></div><input class="fii" style="flex:1" placeholder="Alarma..."><button data-rm="1" style="border:none;background:none;cursor:pointer;font-size:14px;color:var(--t3)">×</button>';
+  l.appendChild(d);
+}
+function addPend() {
+  var l = document.getElementById('lst-pend'); if (!l) return;
+  var d = document.createElement('div'); d.className = 'ar';
+  d.innerHTML = '<input type="checkbox" style="accent-color:var(--g);flex-shrink:0"><input class="fii" style="flex:1" placeholder="Pendiente..."><button data-rm="1" style="border:none;background:none;cursor:pointer;font-size:14px;color:var(--t3)">×</button>';
+  l.appendChild(d);
+}
+function addAcc() {
+  var l = document.getElementById('acc-criticas'); if (!l) return;
+  var d = document.createElement('div'); d.className = 'ar'; d.style.cssText='border-bottom:1px solid var(--bd);padding:5px 0';
+  d.innerHTML = '<div style="width:7px;height:7px;border-radius:50%;background:#EF4444;flex-shrink:0"></div><input class="fii" style="flex:1;font-size:12px" placeholder="Acción crítica..."><button data-rm="1" style="border:none;background:none;cursor:pointer;font-size:14px;color:var(--t3)">×</button>';
+  l.appendChild(d);
+}
 
-    function toast(msg, color) {
-        const t = document.getElementById('toast');
-        t.style.background = color; t.textContent = msg; t.style.display = 'block';
-        setTimeout(() => t.style.display = 'none', 3000);
-    }
+// ── GUARDAR ──
+function guardar() {
+  var ing = document.getElementById('sel-ing').value;
+  if (!ing) { toast('Selecciona un ingeniero.','warn'); return; }
+  var turno = document.getElementById('sel-turno').value;
+  var fecha = document.getElementById('sel-fecha').value;
+  var issues = document.getElementById('kpi-issues').value;
+  var desc = document.getElementById('desc-ent').value;
+  var turnoH = parseInt(turno.split(':')[0]);
+  var esNoc = (turnoH >= 19 || turnoH < 6) && ing !== 'Joseph Montenegro';
+  // Agregar chip
+  var chips = document.getElementById('hist-chips');
+  if (chips) {
+    var chip = document.createElement('div'); chip.className = 'hchip';
+    var ds = fecha ? new Date(fecha+'T12:00:00').toLocaleDateString('es-CO',{day:'numeric',month:'short'}) : '';
+    chip.innerHTML = '<b>'+ing+'</b> · '+ds+' · '+turno+' · '+issues+' issues'+(esNoc?' (noche)':'');
+    if (desc) chip.title = desc;
+    chips.insertBefore(chip, chips.firstChild);
+  }
+  // Agregar al registro
+  var tbl = document.getElementById('reg-tbl');
+  if (tbl) {
+    var row = tbl.insertRow(1);
+    var fd = fecha ? new Date(fecha+'T12:00:00').toLocaleDateString('es-CO',{day:'2-digit',month:'2-digit'}) : '';
+    row.innerHTML = '<td>'+fd+'</td><td><strong>'+ing+'</strong></td><td>'+turno+'</td>'
+      +'<td><span class="bdg '+(esNoc?'bp':'bn')+'">'+(esNoc?'Nocturno':'Diurno')+'</span></td>'
+      +'<td>'+issues+'</td><td>-</td><td>-</td><td style="font-size:11px;color:var(--t2)">'+(desc?desc.substring(0,55):'-')+'</td>';
+    var cnt = document.getElementById('reg-cnt');
+    if (cnt) cnt.textContent = (tbl.rows.length-1) + ' registros';
+  }
+  document.getElementById('a-hist').classList.add('open');
+  toast('Turno guardado correctamente ✓','ok');
+}
 
-    // --- INICIO ---
-    document.addEventListener('DOMContentLoaded', () => {
-        loadDraft();
-        if (localStorage.getItem('noc_theme') === 'dark') document.body.classList.add('dark-mode');
-        
-        // Botón tema flotante
-        const btnT = document.createElement('div');
-        btnT.className = 'theme-toggle'; btnT.innerHTML = '🌓';
-        btnT.onclick = toggleTheme; document.body.appendChild(btnT);
+function limpiar() {
+  document.getElementById('sel-ing').value='';
+  ['kpi-issues','kpi-bandeja','kpi-tv','kpi-aud'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=0;});
+  var obs=document.getElementById('obs-msg'); if(obs) obs.value='';
+  var desc=document.getElementById('desc-ent'); if(desc) desc.value='';
+  estAct='';
+  ['est-v','est-a','est-r'].forEach(function(id){var e=document.getElementById(id);if(e){e.style.background='#fff';e.style.color='#6B7280';e.style.borderColor='#E5E7EB';}});
+  var nd=document.getElementById('ing-disp'); if(nd) nd.textContent='Selecciona ingeniero';
+  toast('Formulario limpiado.','warn');
+}
 
-        document.getElementById('kpi-issues').oninput = () => { updateSummary(); saveDraft(); };
-        document.getElementById('desc-ent').oninput = saveDraft;
-        document.getElementById('btn-guardar').onclick = () => {
-            toast('Turno guardado en sistema ✓', '#1DB954');
-            localStorage.removeItem(CONFIG.autoSaveKey);
-        };
+// ── TOAST ──
+function toast(msg, tipo) {
+  var t = document.getElementById('toast');
+  t.style.background = tipo==='ok'?'#1DB954':tipo==='warn'?'#F59E0B':'#EF4444';
+  t.textContent = msg;
+  t.style.display = 'block';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function(){ t.style.display='none'; }, 3500);
+}
+
+// ── CHARTS ──
+function initCharts() {
+  if (typeof Chart === 'undefined') return;
+  var ctx1 = document.getElementById('chart-h');
+  if (ctx1) {
+    if (chH) chH.destroy();
+    chH = new Chart(ctx1, {
+      type:'bar',
+      data:{
+        labels:['Jhon','Joseph','Jack','Durbey','Facundo','Luisa'],
+        datasets:[
+          {label:'Diurno',data:[36,60,30,42,18,36],backgroundColor:'#1DB954',borderRadius:4},
+          {label:'Nocturno',data:[36,0,30,36,54,30],backgroundColor:'#8B5CF6',borderRadius:4},
+          {label:'Festivo',data:[6,0,6,6,12,6],backgroundColor:'#EF4444',borderRadius:4}
+        ]
+      },
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false}},
+        scales:{
+          x:{stacked:true,grid:{color:'rgba(0,0,0,.05)'},ticks:{color:'#9AA0AB',font:{size:11}},title:{display:true,text:'Horas',color:'#9AA0AB',font:{size:10}}},
+          y:{stacked:true,grid:{display:false},ticks:{color:'#555E6B',font:{size:11}}}
+        }}
     });
+  }
+  var ctx2 = document.getElementById('chart-t');
+  if (ctx2) {
+    if (chT) chT.destroy();
+    chT = new Chart(ctx2, {
+      type:'doughnut',
+      data:{labels:['06:00–12:00','12:00–18:00','18:00–00:00','00:00–06:00'],datasets:[{data:[12,10,6,8],backgroundColor:['#1DB954','#3B82F6','#F59E0B','#8B5CF6'],borderWidth:0,hoverOffset:4}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{display:false}}}
+    });
+    var leg = document.getElementById('chart-leg');
+    if (leg) {
+      leg.innerHTML='';
+      [['06-12 Diurno','#1DB954',12],['12-18 Diurno','#3B82F6',10],['18-00 Nocturno','#F59E0B',6],['00-06 Nocturno','#8B5CF6',8]].forEach(function(l){
+        leg.innerHTML += '<span style="display:flex;align-items:center;gap:4px;font-size:11px;color:#555E6B"><span style="width:9px;height:9px;border-radius:2px;background:'+l[1]+';flex-shrink:0"></span>'+l[0]+' ('+l[2]+')</span>';
+      });
+    }
+  }
+}
+
+// ── WIRING ──
+document.addEventListener('DOMContentLoaded', function() {
+  // Tabs
+  document.querySelectorAll('.tab-btn').forEach(function(b){
+    b.addEventListener('click', function(){ switchTab(this.getAttribute('data-tab'), this); });
+  });
+  // Accordions
+  document.querySelectorAll('[data-acc]').forEach(function(el){
+    el.addEventListener('click', function(){ toggleAcc(this.getAttribute('data-acc')); });
+  });
+  // Estado semáforo
+  document.querySelectorAll('[data-est]').forEach(function(el){
+    el.addEventListener('click', function(){ setEstado(this.getAttribute('data-est')); });
+  });
+  // Templates obs
+  document.querySelectorAll('[data-tpl]').forEach(function(el){
+    el.addEventListener('click', function(){ obsTemplate(this.getAttribute('data-tpl')); });
+  });
+  // Remove buttons (delegation)
+  document.addEventListener('click', function(e){
+    if (e.target && e.target.getAttribute && e.target.getAttribute('data-rm')==='1') {
+      var row = e.target.closest('.ar') || e.target.closest('.ir');
+      if (row) row.remove();
+    }
+  });
+  // Ingeniero
+  var si = document.getElementById('sel-ing');
+  if (si) si.addEventListener('change', onIngChange);
+  // Turno
+  var st = document.getElementById('sel-turno');
+  if (st) st.addEventListener('change', updHeader);
+  // KPIs
+  ['kpi-issues','kpi-bandeja','kpi-tv','kpi-aud'].forEach(function(id){
+    var e=document.getElementById(id); if(e) e.addEventListener('change', updHeader);
+  });
+  // Obs textarea
+  var om = document.getElementById('obs-msg');
+  if (om) om.addEventListener('keyup', updObsCnt);
+  // Add buttons
+  var bm=document.getElementById('btn-add-mas'); if(bm) bm.addEventListener('click',addMas);
+  var bmn=document.getElementById('btn-add-men'); if(bmn) bmn.addEventListener('click',addMen);
+  var ba=document.getElementById('btn-add-alm'); if(ba) ba.addEventListener('click',addAlm);
+  var bp=document.getElementById('btn-add-pend'); if(bp) bp.addEventListener('click',addPend);
+  var bac=document.getElementById('btn-add-accion'); if(bac) bac.addEventListener('click',addAcc);
+  // Action bar
+  var bg=document.getElementById('btn-guardar'); if(bg) bg.addEventListener('click',guardar);
+  var bc=document.getElementById('btn-clear'); if(bc) bc.addEventListener('click',limpiar);
+  // Refresh
+  var br=document.getElementById('btn-refresh'); if(br) br.addEventListener('click',function(){
+    var n=new Date(); var lu=document.getElementById('lastUpd');
+    if(lu) lu.textContent='· '+n.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit',second:'2-digit'})+' COT';
+    toast('Datos actualizados','ok');
+  });
+  // Charts selects
+  var rp=document.getElementById('reg-per');
+  if(rp) rp.addEventListener('change',function(){if(document.getElementById('panel-registro').classList.contains('active'))initCharts();});
+  var ri=document.getElementById('reg-ing');
+  if(ri) ri.addEventListener('change',function(){if(document.getElementById('panel-registro').classList.contains('active'))initCharts();});
+  // Fecha hoy
+  var fd=document.getElementById('sel-fecha');
+  if(fd){ var now=new Date(); fd.value=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0'); }
+});
 </script>
-</body>
-</html>

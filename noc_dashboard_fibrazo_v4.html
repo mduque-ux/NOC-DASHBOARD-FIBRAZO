@@ -1,8 +1,13 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOC Dashboard — Fibrazo v5.1</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-
 <style>
-/* TUS ESTILOS BASE ORIGINALES */
+/* 1. TUS ESTILOS ORIGINALES (PRESERVADOS) */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--g:#1DB954;--gd:#15883C;--gl:#E8F8EE;--bk:#0D0D0D;--bg:#F2F3F5;--sf:#fff;--bd:#E8E9EC;--t1:#0D0D0D;--t2:#555E6B;--t3:#9AA0AB;--fh:'Syne',sans-serif;--fb:'DM Sans',sans-serif;--fm:'DM Mono',monospace;--sh:0 1px 4px rgba(0,0,0,.07),0 0 0 1px rgba(0,0,0,.04)}
 body{font-family:var(--fb);background:var(--bg);color:var(--t1);font-size:13px;line-height:1.5}
@@ -15,16 +20,13 @@ body{font-family:var(--fb);background:var(--bg);color:var(--t1);font-size:13px;l
 .tab-dot{width:7px;height:7px;border-radius:50%;background:var(--t3);flex-shrink:0}
 .tab-btn.active .tab-dot{background:var(--g)}
 .tab-panel{display:none}.tab-panel.active{display:block}
-.hdr{background:var(--bk);border-radius:16px;padding:20px 24px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;color:#fff}
+.hdr{background:var(--bk);border-radius:16px;padding:20px 24px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;color:#fff;position:relative;overflow:hidden}
+.hdr::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(29,185,84,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(29,185,84,.04) 1px,transparent 1px);background-size:32px 32px;pointer-events:none}
 .brand{font-family:var(--fh);font-size:16px;font-weight:800}.brand span{color:var(--g)}
-
-/* KPI GRID MEJORADO */
 .kgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-bottom:12px}
 .kpi{background:var(--sf);border-radius:12px;padding:14px;border-top:3px solid var(--kc,var(--bd));box-shadow:var(--sh);text-decoration:none;color:inherit}
 .kpi-v{font-family:var(--fh);font-size:28px;font-weight:800;line-height:1}
 .kpi-s{font-size:11px;color:var(--t3);margin-top:4px}
-
-/* TABLAS Y CARDS */
 .card{background:var(--sf);border-radius:12px;border:1px solid var(--bd);overflow:hidden;margin-bottom:12px}
 .ch{padding:11px 14px;border-bottom:1px solid var(--bd);font-weight:700;display:flex;justify-content:space-between}
 .cb{padding:12px 14px}
@@ -33,37 +35,42 @@ body{font-family:var(--fb);background:var(--bg);color:var(--t1);font-size:13px;l
 .tbl td{padding:6px 7px;border-bottom:1px solid #F5F6F8}
 .bdg{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:600}
 .br{background:#FEE2E2;color:#991B1B}.bg{background:var(--gl);color:var(--gd)}.bb{background:#DBEAFE;color:#1E40AF}.by{background:#FEF3C7;color:#92400E}
+.iti{font-family:var(--fm);font-size:10px;background:#F3F4F6;padding:2px 6px;border-radius:4px;text-decoration:none;color:inherit}
+.bnr{padding:7px 10px;border-radius:8px;font-size:12px;margin-bottom:10px;border-left:3px solid transparent}
 
-/* MODAL Y HISTORIAL */
-#modalReporte{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:9999;align-items:center;justify-content:center}
-.modal-content{background:#fff;padding:24px;border-radius:16px;max-width:550px;width:100%; position:relative}
-.close-btn { position:absolute; top:15px; right:20px; font-size:24px; cursor:pointer; color:var(--t3)}
+/* 2. ESTILOS DE ENTREGA (MEJORADOS) */
+.pill{padding:6px 12px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--bd);opacity:0.4}.pill.active{opacity:1;transform:scale(1.05)}
+.fta{width:100%;border:1px solid var(--bd);border-radius:8px;padding:9px 11px;font-family:var(--fb);font-size:12px;background:var(--bg);resize:vertical}
+.tkpi{background:var(--sf);border-radius:12px;padding:12px 14px;border-left:3px solid var(--tc,var(--bd));box-shadow:var(--sh)}
+.kedit{border:none;border-bottom:2px solid var(--tc,var(--bd));background:transparent;font-family:var(--fh);font-size:26px;font-weight:800;width:70px;outline:none}
+
+/* 3. MODAL Y HISTORIAL */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:9999}
+.modal-content{background:var(--sf);padding:24px;border-radius:16px;width:90%;max-width:550px;position:relative}
+.close-btn {position:absolute; top:15px; right:20px; font-size:24px; cursor:pointer; color:var(--t3); font-weight:800}
 #reportTextArea{width:100%;height:350px;font-family:var(--fm);font-size:12px;padding:12px;background:#f8f9fa;resize:none;border:1px solid var(--bd)}
-.hist-v5 {margin-top:20px; background:var(--sf); padding:15px; border-radius:12px; border:1px solid var(--bd); box-shadow:var(--sh)}
+.hist-v5 {margin-top:24px; background:var(--sf); padding:15px; border-radius:12px; border:1px solid var(--bd); box-shadow:var(--sh)}
 </style>
 
 <div class="wrap">
     <div class="tab-nav">
-        <button class="tab-btn active" data-tab="dashboard"><span class="tab-dot"></span>Dashboard NOC</button>
-        <button class="tab-btn" data-tab="turno"><span class="tab-dot"></span>Entrega de Turno</button>
-        <button class="tab-btn" data-tab="registro"><span class="tab-dot"></span>Registro & Analítica</button>
+        <button class="tab-btn active" onclick="switchTab('dashboard', this)"><span class="tab-dot"></span>Dashboard NOC</button>
+        <button class="tab-btn" onclick="switchTab('turno', this)"><span class="tab-dot"></span>Entrega de Turno</button>
+        <button class="tab-btn" onclick="switchTab('registro', this)"><span class="tab-dot"></span>Registro & Analítica</button>
     </div>
 
     <div id="panel-dashboard" class="tab-panel active">
         <div class="hdr">
-            <div><div class="brand">FIBRA<span>ZO</span> — NOC</div><div style="font-size:11px; opacity:0.6">Panel Maestro de Red · Operaciones</div></div>
+            <div><div class="brand">FIBRA<span>ZO</span> — NOC</div><div style="font-size:11px; opacity:0.6">G:\Mi unidad\Automatización · Panel Maestro</div></div>
             <div style="text-align:right"><div id="hdrDate" style="font-weight:700"></div><div id="liveClock" style="font-family:var(--fm); opacity:0.5"></div></div>
         </div>
 
         <div class="kgrid">
-            <div class="kpi" style="--kc:#EF9F27">
-                <div style="font-size:10px">ODOO NOC (CO/AR)</div>
-                <div class="kpi-v">23</div> <div class="kpi-s">21 CO · 2 AR Abiertos</div>
-            </div>
+            <div class="kpi" style="--kc:#EF9F27"><div style="font-size:10px">ODOO NOC (CO/AR)</div><div class="kpi-v">23</div><div class="kpi-s">21 CO · 2 AR Abiertos</div></div>
             <div class="kpi" style="--kc:#EF4444"><div style="font-size:10px">Fallas TV</div><div class="kpi-v">4</div><div class="kpi-s">2 Masivos · 2 Alertas</div></div>
-            <div class="kpi" style="--kc:#EF4444"><div style="font-size:10px">BitNinja</div><div class="kpi-v">2</div><div class="kpi-s">Amenazas detectadas</div></div>
-            <div class="kpi" style="--kc:#1DB954"><div style="font-size:10px">MOPs Activos</div><div class="kpi-v">1</div><div class="kpi-s">POP OLT 1 Cartagena</div></div>
-            <div class="kpi" style="--kc:#3B82F6"><div style="font-size:10px">Liberty / C&W</div><div class="kpi-v">1</div><div class="kpi-s">Ticket #893170</div></div>
+            <div class="kpi" style="--kc:#EF4444"><div style="font-size:10px">BitNinja (3d)</div><div class="kpi-v">2</div><div class="kpi-s">Últimos 3 días</div></div>
+            <div class="kpi" style="--kc:#1DB954"><div style="font-size:10px">MOPs Activos</div><div class="kpi-v">1</div><div class="kpi-s">Próximo: 16 Mar · 4 AM</div></div>
+            <div class="kpi" style="--kc:#3B82F6"><div style="font-size:10px">Liberty (5d)</div><div class="kpi-v">1</div><div class="kpi-s">Ticket #893170</div></div>
         </div>
 
         <div class="g2">
@@ -71,11 +78,11 @@ body{font-family:var(--fb);background:var(--bg);color:var(--t1);font-size:13px;l
                 <div class="ch"><span>🇨🇴 BANDEJA NOC COLOMBIA</span> <span class="bdg br">21 ABIERTOS</span></div>
                 <div class="cb">
                     <table class="tbl">
-                        <tr><th>Ticket</th><th>Sitio</th><th>Prioridad</th><th>Estado</th></tr>
-                        <tr><td>#289192</td><td>PER-OLT01</td><td>Alta</td><td><span class="bdg br">Urgente</span></td></tr>
-                        <tr><td>#288980</td><td>CAR-OLT03</td><td>Baja</td><td><span class="bdg by">Pendiente</span></td></tr>
-                        <tr><td>#289210</td><td>TRONCAL</td><td>Media</td><td><span class="bdg bb">Asignado</span></td></tr>
-                        <tr><td colspan="4" style="text-align:center; font-size:10px; color:var(--t3)">+ 18 tickets adicionales en bandeja</td></tr>
+                        <tr><th>Ticket</th><th>Sitio / Área</th><th>Estado</th><th>Tiempo</th></tr>
+                        <tr><td><span class="iti">#289192</span></td><td>PER-OLT01 · Cartagena</td><td><span class="bdg br">Nuevo</span></td><td>0h 45m</td></tr>
+                        <tr><td><span class="iti">#289210</span></td><td>TRONCAL · Colombia</td><td><span class="bdg br">Asignado</span></td><td>2h 10m</td></tr>
+                        <tr><td><span class="iti">#288980</span></td><td>CAR-OLT03 · Barranquilla</td><td><span class="bdg by">Pendiente</span></td><td>38h 15m</td></tr>
+                        <tr><td colspan="4" style="text-align:center; color:var(--t3); font-size:10px">Ver 18 tickets más en Odoo...</td></tr>
                     </table>
                 </div>
             </div>
@@ -83,33 +90,27 @@ body{font-family:var(--fb);background:var(--bg);color:var(--t1);font-size:13px;l
                 <div class="ch"><span>🇦🇷 BANDEJA NOC ARGENTINA</span> <span class="bdg bb">2 ABIERTOS</span></div>
                 <div class="cb">
                     <table class="tbl">
-                        <tr><th>Ticket</th><th>Detalle</th><th>SLA</th><th>Estado</th></tr>
-                        <tr><td>#289201</td><td>CORE BSAS</td><td>1h 15m</td><td><span class="bdg br">En Proceso</span></td></tr>
-                        <tr><td>#289205</td><td>INTERNACIONAL</td><td>2h 30m</td><td><span class="bdg br">Nuevo</span></td></tr>
+                        <tr><th>Ticket</th><th>Sitio / Área</th><th>Estado</th><th>Tiempo</th></tr>
+                        <tr><td><span class="iti">#289201</span></td><td>CORE BSAS · Argentina</td><td><span class="bdg br">En Proceso</span></td><td>1h 15m</td></tr>
+                        <tr><td><span class="iti">#289205</span></td><td>INTERNACIONAL</td><td><span class="bdg br">Nuevo</span></td><td>2h 30m</td></tr>
                     </table>
                 </div>
             </div>
         </div>
-        
-        <div class="card">
-            <div class="ch"><span>📊 RESUMEN EJECUTIVO — REPORTES PROVEEDORES</span></div>
-            <div class="cb">
-                <div class="g3">
-                    <div style="background:var(--bg); padding:10px; border-radius:8px">
-                        <div style="font-weight:700; font-size:10px">MONITOR TV</div>
-                        <div style="color:#991B1B; font-size:11px; margin-top:5px">• Canal AZ Corazón: DOWN (4h)</div>
-                        <div style="color:#991B1B; font-size:11px">• RedBull TV: Falla Origen</div>
-                    </div>
-                    <div style="background:var(--bg); padding:10px; border-radius:8px">
-                        <div style="font-weight:700; font-size:10px">BITNINJA ALERTS</div>
-                        <div style="color:var(--t1); font-size:11px; margin-top:5px">• 77.247.120.128 (Activo)</div>
-                        <div style="color:var(--t1); font-size:11px">• 185.220.101.44 (Bloqueado)</div>
-                    </div>
-                    <div style="background:var(--bg); padding:10px; border-radius:8px">
-                        <div style="font-weight:700; font-size:10px">LIBERTY / C&W</div>
-                        <div style="color:#92400E; font-size:11px; margin-top:5px">• #893170: Clareado Pendiente</div>
-                        <div style="color:var(--t3); font-size:10px">SLA: 72 horas excedido</div>
-                    </div>
+
+        <div class="g2">
+            <div class="card">
+                <div class="ch"><span>📺 Monitor TV</span></div>
+                <div class="cb">
+                    <div class="bnr" style="background:#FEF2F2; color:#991B1B">Canal AZ Corazón: DOWN hace 4h</div>
+                    <div class="bnr" style="background:#FEF2F2; color:#991B1B">RedBull TV: Falla Origen</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="ch"><span>🛡️ Seguridad BitNinja / Liberty</span></div>
+                <div class="cb">
+                    <div style="font-size:11px; margin-bottom:5px"><b>IP Bloqueada:</b> 77.247.120.128</div>
+                    <div class="bnr" style="background:#FFFBEB; color:#92400E; border-left:3px solid #F59E0B">🌐 Liberty #893170: Clareado Pendiente</div>
                 </div>
             </div>
         </div>
@@ -138,24 +139,24 @@ body{font-family:var(--fb);background:var(--bg);color:var(--t1);font-size:13px;l
 
         <div class="tkr">
             <div class="tkpi" style="--tc:#EF9F27"><div style="font-size:10px">Issues</div><input class="kedit" type="number" value="2" id="val-issues"></div>
-            <div class="tkpi" style="--tc:#EF4444"><div style="font-size:10px">Odoo (Suma)</div><input class="kedit" type="number" value="23" id="val-odoo"></div>
-            <div class="tkpi" style="--tc:#3B82F6"><div style="font-size:10px">Fallas TV</div><input class="kedit" type="number" value="4" id="val-tv"></div>
+            <div class="tkpi" style="--tc:#EF4444"><div style="font-size:10px">Odoo (Total)</div><input class="kedit" type="number" value="23" id="val-odoo"></div>
+            <div class="tkpi" style="--tc:#3B82F6"><div style="font-size:10px">TV</div><input class="kedit" type="number" value="4" id="val-tv"></div>
             <div class="tkpi" style="--tc:#1DB954"><div style="font-size:10px">MOPs</div><input class="kedit" type="number" value="0" id="val-mops"></div>
         </div>
 
         <div class="card">
-            <div class="ch">Tickets del Turno: <span id="ing-name" style="color:var(--g)">-</span></div>
+            <div class="ch">Resumen de Entrega: <span id="ing-name" style="color:var(--g)">-</span></div>
             <div class="cb">
                 <textarea id="prioridades" class="fta" style="margin-top:10px; border-color:#F59E0B" placeholder="Prioridades Relevo..."></textarea>
                 <textarea id="resumen-turno" class="fta" style="margin-top:10px; border:2px solid var(--g)" placeholder="Novedades Generales (WhatsApp)..."></textarea>
-                <button onclick="generarReporte()" style="width:100%; padding:12px; margin-top:10px; background:var(--bk); color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:700">✓ GENERAR REPORTE WHATSAPP</button>
+                <button onclick="generarReporteFinal()" style="width:100%; padding:12px; margin-top:10px; background:var(--bk); color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:700">✓ GENERAR REPORTE WHATSAPP</button>
             </div>
         </div>
 
         <div class="hist-v5">
             <div style="font-weight:800; font-size:11px; margin-bottom:10px; color:var(--t2)">📂 HISTORIAL DE ENTREGAS RECIENTES</div>
-            <table class="tbl">
-                <thead><tr><th>Fecha</th><th>Ingeniero</th><th>Turno</th><th>Métricas</th></tr></thead>
+            <table class="htbl" style="width:100%; border-collapse:collapse; font-size:12px">
+                <thead><tr style="text-align:left; color:var(--t3); font-size:10px"><th>Fecha</th><th>Ingeniero</th><th>Turno</th><th>Métricas</th></tr></thead>
                 <tbody id="historialBody"></tbody>
             </table>
         </div>
@@ -164,17 +165,19 @@ body{font-family:var(--fb);background:var(--bg);color:var(--t1);font-size:13px;l
     <div id="panel-registro" class="tab-panel">
         <div class="g2">
             <div class="card"><div class="ch">Horas por Ingeniero</div><div class="cb"><canvas id="chart-h" height="250"></canvas></div></div>
-            <div class="card"><div class="ch">Distribución por Franja</div><div class="cb"><canvas id="chart-t" height="250"></canvas></div></div>
+            <div class="card"><div class="ch">Distribución de Turnos</div><div class="cb"><canvas id="chart-t" height="250"></canvas></div></div>
         </div>
     </div>
 </div>
 
-<div id="modalReporte"><div class="modal-content">
-    <span class="close-btn" onclick="document.getElementById('modalReporte').style.display='none'">×</span>
-    <div style="font-weight:800; margin-bottom:10px; font-family:var(--fh)">REPORTE WHATSAPP</div>
-    <textarea id="reportTextArea" readonly></textarea>
-    <button id="btnCopiar" onclick="copiarReporte()" style="width:100%; padding:10px; margin-top:10px; background:var(--g); color:#fff; border:none; border-radius:8px; font-weight:700">Copiar al Portapapeles</button>
-</div></div>
+<div id="modalReporte" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="document.getElementById('modalReporte').style.display='none'">×</span>
+        <h3 style="font-family:var(--fh); margin-bottom:10px">REPORTE WHATSAPP</h3>
+        <textarea id="reportTextArea" readonly></textarea>
+        <button id="btnCopiar" onclick="copiarReporte()" style="width:100%; padding:12px; background:var(--g); color:white; border:none; border-radius:8px; font-weight:700; cursor:pointer; margin-top:10px">Copiar al Portapapeles</button>
+    </div>
+</div>
 
 <script>
 let historialData = JSON.parse(localStorage.getItem('historialNOC')) || [];
@@ -187,15 +190,13 @@ function updateClock() {
 }
 setInterval(updateClock, 1000); updateClock();
 
-document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-        btn.classList.add('active');
-        document.getElementById('panel-' + btn.getAttribute('data-tab')).classList.add('active');
-        if(btn.getAttribute('data-tab') === 'registro') setTimeout(initCharts, 100);
-    });
-});
+function switchTab(tab, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('panel-' + tab).classList.add('active');
+    btn.classList.add('active');
+    if(tab === 'registro') setTimeout(initCharts, 100);
+}
 
 function setPill(txt) {
     estadoActual = txt;
@@ -205,18 +206,17 @@ function setPill(txt) {
     if(txt.includes("ALERTA")) document.getElementById('p-crit').classList.add('active');
 }
 
-function generarReporte() {
+function generarReporteFinal() {
     const ing = document.getElementById('sel-ing').value;
     if(!ing) return alert("Selecciona ingeniero");
     
     const iss = document.getElementById('val-issues').value;
     const tv = document.getElementById('val-tv').value;
-    const mops = document.getElementById('val-mops').value;
     const od = document.getElementById('val-odoo').value;
-    const p = document.getElementById('prioridades').value || "Sin prioridades registradas";
-    const n = document.getElementById('resumen-turno').value || "Sin novedades adicionales";
+    const p = document.getElementById('prioridades').value || "Ninguna";
+    const n = document.getElementById('resumen-turno').value || "Sin novedades";
 
-    const texto = `*ENTREGA DE TURNO NOC*\n\n*Ingeniero:* ${ing}\n*Turno:* ${document.getElementById('sel-franja').value}\n*Estado:* ${estadoActual}\n\n*MÉTRICAS:*\nIssues: ${iss}\nBandeja Odoo: ${od}\nFallas TV: ${tv}\nMOPs: ${mops}\n\n*PRIORIDADES RELEVO:*\n${p}\n\n*NOVEDADES GENERALES:*\n${n}\n\n_Generado: ${new Date().toLocaleTimeString()}_`;
+    const texto = `*ENTREGA DE TURNO NOC*\n\n*Ingeniero:* ${ing}\n*Estado:* ${estadoActual}\n\n*MÉTRICAS:*\nIssues: ${iss}\nBandeja Odoo: ${od}\nFallas TV: ${tv}\n\n*PRIORIDADES:*\n${p}\n\n*NOVEDADES:*\n${n}`;
     
     document.getElementById('reportTextArea').value = texto;
     document.getElementById('modalReporte').style.display = 'flex';
@@ -235,23 +235,17 @@ function copiarReporte() {
     setTimeout(() => { 
         document.getElementById('modalReporte').style.display='none';
         btn.textContent = "Copiar al Portapapeles";
-    }, 1200);
+    }, 1000);
 }
 
 function renderHistorial() {
     const b = document.getElementById('historialBody');
-    b.innerHTML = historialData.map(h => `<tr><td>${h.fecha}</td><td><strong>${h.ing}</strong></td><td>${h.turno}</td><td style="color:var(--gd)">${h.res}</td></tr>`).join('');
+    b.innerHTML = historialData.map(h => `<tr style="border-bottom:1px solid #eee"><td style="padding:8px">${h.fecha}</td><td><strong>${h.ing}</strong></td><td>${h.turno}</td><td style="color:var(--gd)">${h.res}</td></tr>`).join('');
 }
 
 function initCharts() {
-    new Chart(document.getElementById('chart-h'), {
-        type: 'bar', data: { labels: ['Jhon', 'Joseph', 'Jack'], datasets: [{ label: 'Horas Mes', data: [120, 150, 80], backgroundColor: '#1DB954' }] },
-        options: { indexAxis: 'y', maintainAspectRatio: false }
-    });
-    new Chart(document.getElementById('chart-t'), {
-        type: 'doughnut', data: { labels: ['06-12', '12-18', '18-00'], datasets: [{ data: [12, 10, 6], backgroundColor: ['#1DB954', '#3B82F6', '#EF4444'] }] },
-        options: { maintainAspectRatio: false }
-    });
+    new Chart(document.getElementById('chart-h'), { type: 'bar', data: { labels: ['Jhon', 'Joseph', 'Jack'], datasets: [{ label: 'Horas', data: [120, 150, 80], backgroundColor: '#1DB954' }] }, options: { responsive: true, maintainAspectRatio: false } });
+    new Chart(document.getElementById('chart-t'), { type: 'doughnut', data: { labels: ['Mañana', 'Tarde', 'Noche'], datasets: [{ data: [40, 35, 25], backgroundColor: ['#1DB954', '#3B82F6', '#EF4444'] }] }, options: { responsive: true, maintainAspectRatio: false } });
 }
 window.onload = () => { renderHistorial(); document.getElementById('sel-fecha').value = new Date().toISOString().split('T')[0]; };
 </script>

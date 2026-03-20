@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NOC Dashboard — Fibrazo V5</title>
+<title>NOC Dashboard — Fibrazo v5</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-/* 1. TUS ESTILOS ORIGINALES (MANTENIDOS AL 100%) */
+/* MANTENIENDO TODOS TUS ESTILOS ORIGINALES */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--g:#1DB954;--gd:#15883C;--gl:#E8F8EE;--bk:#0D0D0D;--bg:#F2F3F5;--sf:#fff;--bd:#E8E9EC;--t1:#0D0D0D;--t2:#555E6B;--t3:#9AA0AB;--fh:'Syne',sans-serif;--fb:'DM Sans',sans-serif;--fm:'DM Mono',monospace;--sh:0 1px 4px rgba(0,0,0,.07),0 0 0 1px rgba(0,0,0,.04)}
 body{font-family:var(--fb);background:var(--bg);color:var(--t1);font-size:13px;line-height:1.5}
@@ -23,119 +23,120 @@ body{font-family:var(--fb);background:var(--bg);color:var(--t1);font-size:13px;l
 .tab-panel{display:none}
 .tab-panel.active{display:block;animation:fadeUp .3s ease}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-
-/* ESTILOS DE HEADER Y CARDS ORIGINALES */
-.hdr{background:var(--bk);border-radius:16px;padding:20px 24px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;color:white;position:relative;overflow:hidden}
+.hdr{background:var(--bk);border-radius:16px;padding:20px 24px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;position:relative;overflow:hidden;color:white}
 .hdr::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(29,185,84,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(29,185,84,.04) 1px,transparent 1px);background-size:32px 32px;pointer-events:none}
 .brand{font-family:var(--fh);font-size:16px;font-weight:800;color:#fff}
 .brand span{color:var(--g)}
 .kgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-bottom:12px}
 .kpi{background:var(--sf);border-radius:12px;padding:14px;border-top:3px solid var(--kc,var(--bd));box-shadow:var(--sh)}
-.kpi-v{font-family:var(--fh);font-size:28px;font-weight:800;line-height:1}
+.kpi-v{font-family:var(--fh);font-size:28px;font-weight:800;color:var(--kc,var(--t1));line-height:1}
 .card{background:var(--sf);border-radius:12px;border:1px solid var(--bd);overflow:hidden;box-shadow:var(--sh)}
 .cb{padding:12px 14px}
 .tkr{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:12px}
 .tkpi{background:var(--sf);border-radius:12px;padding:12px 14px;border-left:3px solid var(--tc,var(--bd));box-shadow:var(--sh)}
 .kedit{border:none;border-bottom:2px solid var(--tc,var(--bd));background:transparent;font-family:var(--fh);font-size:26px;font-weight:800;width:70px;outline:none}
-.fta{width:100%;border:1px solid var(--bd);border-radius:8px;padding:9px 11px;font-family:var(--fb);font-size:12px;background:var(--bg);resize:vertical}
-.btns,.btnp{display:flex;align-items:center;gap:5px;padding:8px 14px;border-radius:8px;cursor:pointer;font-family:var(--fb);font-weight:600}
-.btnp{background:var(--bk);color:#fff;border:none}
-.btns{background:var(--sf);color:var(--t1);border:1px solid var(--bd)}
+.fta{width:100%;border:1px solid var(--bd);border-radius:8px;padding:9px 11px;font-family:var(--fb);font-size:12px;color:var(--t1);background:var(--bg);resize:vertical;outline:none}
+.btnp{display:flex;align-items:center;gap:5px;padding:8px 20px;border-radius:8px;border:none;background:var(--bk);color:#fff;font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer}
+.btns{display:flex;align-items:center;gap:5px;padding:8px 14px;border-radius:8px;border:1px solid var(--bd);background:var(--sf);color:var(--t1);font-family:var(--fb);font-size:13px;font-weight:500;cursor:pointer}
 
-/* 2. NUEVOS ESTILOS PARA MODAL Y HISTORIAL (AÑADIDOS) */
-.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 9999; }
-.modal-content { background: var(--sf); padding: 24px; border-radius: 16px; width: 90%; max-width: 500px; position: relative; }
-.close-modal { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: var(--t3); }
-#textoReporte { background: var(--bg); padding: 15px; border-radius: 8px; font-family: var(--fm); font-size: 11px; white-space: pre-wrap; margin: 15px 0; border: 1px solid var(--bd); max-height: 300px; overflow-y: auto; color: var(--t1); }
-.hist-v5 { margin-top: 24px; background: var(--sf); border: 1px solid var(--bd); border-radius: 12px; padding: 20px; box-shadow: var(--sh); }
-.htbl { width: 100%; border-collapse: collapse; font-size: 12px; }
-.htbl th { text-align: left; padding: 8px; color: var(--t3); border-bottom: 1px solid var(--bd); font-size: 10px; text-transform: uppercase; }
-.htbl td { padding: 10px 8px; border-bottom: 1px solid #f5f5f5; }
+/* --- AJUSTES NUEVOS V5 (SIN BORRAR NADA) --- */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:9999}
+.modal-content{background:var(--sf);padding:24px;border-radius:16px;width:90%;max-width:500px;position:relative}
+.close-modal{position:absolute;top:15px;right:20px;font-size:24px;cursor:pointer;color:var(--t3)}
+#textoReporte{background:var(--bg);padding:15px;border-radius:8px;font-family:var(--fm);font-size:11px;white-space:pre-wrap;margin:15px 0;border:1px solid var(--bd);max-height:300px;overflow-y:auto}
+.hist-v5{margin-top:24px;background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:20px;box-shadow:var(--sh)}
+.htbl{width:100%;border-collapse:collapse;font-size:12px}
+.htbl th{text-align:left;padding:8px;color:var(--t3);border-bottom:1px solid var(--bd);font-size:10px;text-transform:uppercase}
+.htbl td{padding:10px 8px;border-bottom:1px solid #f5f5f5}
 </style>
+</head>
+<body>
 
 <div class="wrap">
-  <div class="tab-nav" id="tabnav">
-    <button class="tab-btn active" onclick="switchTab('dashboard', this)"><span class="tab-dot"></span>Dashboard NOC</button>
-    <button class="tab-btn" onclick="switchTab('turno', this)"><span class="tab-dot"></span>Entrega de Turno</button>
-    <button class="tab-btn" onclick="switchTab('registro', this)"><span class="tab-dot"></span>Registro & Analítica</button>
-  </div>
-
-  <div class="tab-panel active" id="panel-dashboard">
-    <div class="hdr">
-      <div class="brand">FIBRA<span>ZO</span> — NOC</div>
-      <div id="liveClock">--:--:--</div>
+    <div class="tab-nav">
+        <button class="tab-btn active" onclick="switchTab('dashboard', this)"><span class="tab-dot"></span>Dashboard NOC</button>
+        <button class="tab-btn" onclick="switchTab('turno', this)"><span class="tab-dot"></span>Entrega de Turno</button>
+        <button class="tab-btn" onclick="switchTab('registro', this)"><span class="tab-dot"></span>Registro & Analítica</button>
     </div>
-    <div class="kgrid">
-      <div class="kpi" style="--kc:#EF9F27">Tickets ODOO<div class="kpi-v">11</div></div>
-      <div class="kpi" style="--kc:#EF4444">Canales TV<div class="kpi-v">4</div></div>
-      <div class="kpi" style="--kc:#EF4444">BitNinja<div class="kpi-v">2</div></div>
-      <div class="kpi" style="--kc:#1DB954">MOPs<div class="kpi-v">1</div></div>
-      <div class="kpi" style="--kc:#3B82F6">Liberty<div class="kpi-v">1</div></div>
-    </div>
-    <p style="text-align:center; padding:40px; color:var(--t3)">Dashboard de monitoreo activo...</p>
-  </div>
 
-  <div class="tab-panel" id="panel-turno">
-    <div class="thdr">
-      <div class="g2">
-        <div><div class="brand">Entrega de <span>Turno</span></div></div>
-        <div style="display:flex; gap:10px; justify-content:flex-end">
-          <select class="fta" id="sel-ing" style="width:160px"><option value="">Ingeniero...</option><option>Jhon Lopez</option><option>Joseph Montenegro</option><option>Jack Osma</option></select>
-          <select class="fta" id="sel-turno" style="width:140px"><option>06:00 - 12:00</option><option>12:00 - 18:00</option><option>18:00 - 00:00</option></select>
-          <input type="date" class="fta" id="sel-fecha" style="width:130px">
+    <div class="tab-panel active" id="panel-dashboard">
+        <div class="hdr">
+            <div class="brand">FIBRA<span>ZO</span> — NOC</div>
+            <div id="liveClock">--:--:--</div>
         </div>
-      </div>
-    </div>
+        <div class="kgrid">
+            <div class="kpi" style="--kc:#EF9F27">Tickets ODOO<div class="kpi-v">11</div></div>
+            <div class="kpi" style="--kc:#EF4444">Canales TV<div class="kpi-v">4</div></div>
+            <div class="kpi" style="--kc:#EF4444">BitNinja<div class="kpi-v">2</div></div>
+            <div class="kpi" style="--kc:#1DB954">MOPs<div class="kpi-v">1</div></div>
+            <div class="kpi" style="--kc:#3B82F6">Liberty<div class="kpi-v">1</div></div>
+        </div>
+        </div>
 
-    <div class="tkr">
-      <div class="tkpi" style="--tc:#EF9F27">Issues<br><input class="kedit" type="number" value="2" id="kpi-issues"></div>
-      <div class="tkpi" style="--tc:#EF4444">Bandeja Odoo<br><input class="kedit" type="number" value="49" id="kpi-bandeja"></div>
-      <div class="tkpi" style="--tc:#3B82F6">Fallas TV<br><input class="kedit" type="number" value="4" id="kpi-tv"></div>
-      <div class="tkpi" style="--tc:#1DB954">MOPs<br><input class="kedit" type="number" value="0" id="kpi-mops"></div>
-    </div>
-
-    <div class="card" style="border:2px solid var(--g)">
-      <div class="cb">
-        <div class="g2">
-          <div>
-            <label style="font-size:10px; font-weight:700; color:var(--t3)">ESTADO DEL TURNO</label>
-            <div style="display:flex; gap:10px; margin:10px 0;">
-              <label><input type="radio" name="estado" value="🟢 TURNO LIMPIO" checked> Limpio</label>
-              <label><input type="radio" name="estado" value="🟡 CON PENDIENTES"> Pendientes</label>
-              <label><input type="radio" name="estado" value="🔴 ALERTA ACTIVA"> Alerta</label>
+    <div class="tab-panel" id="panel-turno">
+        <div class="hdr" style="background:var(--bk); margin-bottom:12px;">
+            <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+                <div class="brand">Entrega de <span>Turno</span></div>
+                <div style="display:flex; gap:10px;">
+                    <select class="fta" id="sel-ing" style="width:160px; background:rgba(255,255,255,0.1); color:white; border:none;">
+                        <option value="">Ingeniero...</option>
+                        <option>Jhon Lopez</option><option>Joseph Montenegro</option><option>Jack Osma</option>
+                    </select>
+                    <select class="fta" id="sel-turno" style="width:140px; background:rgba(255,255,255,0.1); color:white; border:none;">
+                        <option>06:00 - 12:00</option><option>12:00 - 18:00</option><option>18:00 - 00:00</option>
+                    </select>
+                    <input type="date" class="fta" id="sel-fecha" style="width:130px; background:rgba(255,255,255,0.1); color:white; border:none;">
+                </div>
             </div>
-            <label style="font-size:10px; font-weight:700; color:var(--t3)">PRIORIDADES RELEVO</label>
-            <textarea id="prioridadesRelevo" class="fta" style="min-height:80px; margin-top:5px" placeholder="Prioridades..."></textarea>
-          </div>
-          <div>
-            <label style="font-size:10px; font-weight:700; color:var(--t3)">NOVEDADES GENERALES (WhatsApp)</label>
-            <textarea id="novedadesGenerales" class="fta" style="min-height:135px; border:2px solid var(--g); margin-top:5px" placeholder="Escribe aquí las novedades que se verán en WhatsApp..."></textarea>
-          </div>
         </div>
-        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:15px">
-            <button class="btns" onclick="location.reload()">✕ Limpiar</button>
-            <button class="btnp" style="background:var(--g)" onclick="generarReporteFinal()">✓ GENERAR REPORTE</button>
+
+        <div class="tkr">
+            <div class="tkpi" style="--tc:#EF9F27">Issues<br><input class="kedit" type="number" value="2" id="kpi-issues"></div>
+            <div class="tkpi" style="--tc:#EF4444">Bandeja Odoo<br><input class="kedit" type="number" value="49" id="kpi-bandeja"></div>
+            <div class="tkpi" style="--tc:#3B82F6">Fallas TV<br><input class="kedit" type="number" value="4" id="kpi-tv"></div>
+            <div class="tkpi" style="--tc:#1DB954">MOPs<br><input class="kedit" type="number" value="0" id="kpi-mops"></div>
         </div>
-      </div>
+
+        <div class="card" style="border:2px solid var(--g)">
+            <div class="cb">
+                <div class="g2">
+                    <div>
+                        <label style="font-size:10px; font-weight:700; color:var(--t3)">ESTADO DEL TURNO</label>
+                        <div style="display:flex; gap:10px; margin:10px 0;">
+                            <label><input type="radio" name="estado" value="🟢 TURNO LIMPIO" checked> Limpio</label>
+                            <label><input type="radio" name="estado" value="🟡 CON PENDIENTES"> Pendientes</label>
+                            <label><input type="radio" name="estado" value="🔴 ALERTA ACTIVA"> Alerta</label>
+                        </div>
+                        <label style="font-size:10px; font-weight:700; color:var(--t3)">PRIORIDADES RELEVO</label>
+                        <textarea id="prioridadesRelevo" class="fta" style="min-height:80px; margin-top:5px" placeholder="Tickets críticos..."></textarea>
+                    </div>
+                    <div>
+                        <label style="font-size:10px; font-weight:700; color:var(--t3)">NOVEDADES GENERALES (WhatsApp)</label>
+                        <textarea id="novedadesGenerales" class="fta" style="min-height:135px; border:2px solid var(--g); margin-top:5px" placeholder="Escribe aquí las novedades detalladas..."></textarea>
+                    </div>
+                </div>
+                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:15px">
+                    <button class="btns" onclick="location.reload()">✕ Limpiar</button>
+                    <button class="btnp" style="background:var(--g)" onclick="generarReporteV5()">✓ GENERAR REPORTE</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="hist-v5">
+            <h4 style="font-family:var(--fh); font-size:14px; margin-bottom:15px;">📂 HISTORIAL DE ENTREGAS RECIENTES</h4>
+            <table class="htbl">
+                <thead><tr><th>Fecha</th><th>Ingeniero</th><th>Turno</th><th>Métricas</th></tr></thead>
+                <tbody id="cuerpoHistorial"></tbody>
+            </table>
+        </div>
     </div>
 
-    <div class="hist-v5">
-        <h4 style="font-family:var(--fh); font-size:14px; margin-bottom:15px;">📂 HISTORIAL DE ENTREGAS RECIENTES</h4>
-        <table class="htbl">
-            <thead>
-                <tr><th>Fecha</th><th>Ingeniero</th><th>Turno</th><th>Resumen</th></tr>
-            </thead>
-            <tbody id="cuerpoHistorial"></tbody>
-        </table>
+    <div class="tab-panel" id="panel-registro">
+        <div class="g2">
+            <div class="card"><div class="cb"><canvas id="chart-h" height="200"></canvas></div></div>
+            <div class="card"><div class="cb"><canvas id="chart-t" height="200"></canvas></div></div>
+        </div>
     </div>
-  </div>
-
-  <div class="tab-panel" id="panel-registro">
-    <div class="g2">
-        <div class="card"><div class="cb"><canvas id="chart-h" height="200"></canvas></div></div>
-        <div class="card"><div class="cb"><canvas id="chart-t" height="200"></canvas></div></div>
-    </div>
-  </div>
 </div>
 
 <div id="modalReporte" class="modal">
@@ -148,7 +149,7 @@ body{font-family:var(--fb);background:var(--bg);color:var(--t1);font-size:13px;l
 </div>
 
 <script>
-let historialData = JSON.parse(localStorage.getItem('historialNOC')) || [];
+let historial = JSON.parse(localStorage.getItem('historialNOC')) || [];
 
 function switchTab(tab, btn) {
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
@@ -158,7 +159,7 @@ function switchTab(tab, btn) {
     if(tab === 'registro') setTimeout(initCharts, 100);
 }
 
-function generarReporteFinal() {
+function generarReporteV5() {
     const ing = document.getElementById('sel-ing').value;
     if(!ing) return alert("Selecciona ingeniero");
 
@@ -193,10 +194,10 @@ _Generado: ${new Date().toLocaleTimeString()}_`;
     document.getElementById('textoReporte').innerText = texto;
     document.getElementById('modalReporte').style.display = "flex";
 
-    // Guardar Historial
-    historialData.unshift({ fecha, ing, turno, resumen: `I:${iss} | B:${ban} | TV:${tv}` });
-    if(historialData.length > 10) historialData.pop();
-    localStorage.setItem('historialNOC', JSON.stringify(historialData));
+    // Guardar en Historial
+    historial.unshift({ fecha, ing, turno, resumen: `I:${iss} | B:${ban} | TV:${tv}` });
+    if(historial.length > 10) historial.pop();
+    localStorage.setItem('historialNOC', JSON.stringify(historial));
     renderHistorial();
 }
 
@@ -208,7 +209,7 @@ function copiarReporte() {
         setTimeout(() => {
             cerrarModal();
             btn.innerText = "Copiar al Portapapeles";
-        }, 1200);
+        }, 1000);
     });
 }
 
@@ -216,7 +217,7 @@ function cerrarModal() { document.getElementById('modalReporte').style.display =
 
 function renderHistorial() {
     const tbody = document.getElementById('cuerpoHistorial');
-    tbody.innerHTML = historialData.map(h => `<tr><td>${h.fecha}</td><td><strong>${h.ing}</strong></td><td>${h.turno}</td><td>${h.resumen}</td></tr>`).join('');
+    tbody.innerHTML = historial.map(h => `<tr><td>${h.fecha}</td><td><strong>${h.ing}</strong></td><td>${h.turno}</td><td>${h.resumen}</td></tr>`).join('');
 }
 
 setInterval(() => { document.getElementById('liveClock').innerText = new Date().toLocaleTimeString(); }, 1000);

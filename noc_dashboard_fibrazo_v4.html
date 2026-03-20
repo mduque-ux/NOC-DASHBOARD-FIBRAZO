@@ -1,7 +1,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+
 <style>
-/* ═══ TUS ESTILOS BASE ORIGINALES ═══ */
+/* TUS ESTILOS BASE ORIGINALES */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--g:#1DB954;--gd:#15883C;--gl:#E8F8EE;--bk:#0D0D0D;--bg:#F2F3F5;--sf:#fff;--bd:#E8E9EC;--t1:#0D0D0D;--t2:#555E6B;--t3:#9AA0AB;--fh:'Syne',sans-serif;--fb:'DM Sans',sans-serif;--fm:'DM Mono',monospace;--sh:0 1px 4px rgba(0,0,0,.07),0 0 0 1px rgba(0,0,0,.04)}
 body{font-family:var(--fb);background:var(--bg);color:var(--t1);font-size:13px;line-height:1.5}
@@ -16,14 +17,14 @@ body{font-family:var(--fb);background:var(--bg);color:var(--t1);font-size:13px;l
 .tab-panel{display:none}.tab-panel.active{display:block}
 .hdr{background:var(--bk);border-radius:16px;padding:20px 24px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;color:#fff}
 .brand{font-family:var(--fh);font-size:16px;font-weight:800}.brand span{color:var(--g)}
-.rbar{display:flex;align-items:center;justify-content:space-between;background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:8px 14px;margin-bottom:12px;gap:10px}
-.rbar-l{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--t2)}
-.ldot{width:7px;height:7px;border-radius:50%;background:var(--g);animation:pulse 2s ease infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* KPI GRID MEJORADO */
 .kgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-bottom:12px}
-.kpi{background:var(--sf);border-radius:12px;padding:14px;border-top:3px solid var(--kc,var(--bd));box-shadow:var(--sh);text-decoration:none;color:inherit;cursor:pointer}
+.kpi{background:var(--sf);border-radius:12px;padding:14px;border-top:3px solid var(--kc,var(--bd));box-shadow:var(--sh);text-decoration:none;color:inherit}
 .kpi-v{font-family:var(--fh);font-size:28px;font-weight:800;line-height:1}
 .kpi-s{font-size:11px;color:var(--t3);margin-top:4px}
+
+/* TABLAS Y CARDS */
 .card{background:var(--sf);border-radius:12px;border:1px solid var(--bd);overflow:hidden;margin-bottom:12px}
 .ch{padding:11px 14px;border-bottom:1px solid var(--bd);font-weight:700;display:flex;justify-content:space-between}
 .cb{padding:12px 14px}
@@ -32,24 +33,12 @@ body{font-family:var(--fb);background:var(--bg);color:var(--t1);font-size:13px;l
 .tbl td{padding:6px 7px;border-bottom:1px solid #F5F6F8}
 .bdg{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:600}
 .br{background:#FEE2E2;color:#991B1B}.bg{background:var(--gl);color:var(--gd)}.bb{background:#DBEAFE;color:#1E40AF}.by{background:#FEF3C7;color:#92400E}
-.iti{font-family:var(--fm);font-size:10px;background:#F3F4F6;padding:2px 6px;border-radius:4px;text-decoration:none;color:inherit}
-.bnr{padding:7px 10px;border-radius:8px;font-size:12px;margin-bottom:10px;border-left:3px solid transparent}
 
-/* ═══ ESTILOS DE ENTREGA ═══ */
-.pill{padding:6px 12px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--bd);opacity:0.4}.pill.active{opacity:1;transform:scale(1.05)}
-.tm-col{background:#f9fafb;padding:12px;border-radius:10px;border:1px solid var(--bd)}
-.t-input{width:100%;border:1px solid var(--bd);border-radius:6px;padding:5px;font-size:11px;font-family:var(--fm);margin-bottom:5px}
-.tkpi{background:var(--sf);border-radius:12px;padding:12px 14px;border-left:3px solid var(--tc,var(--bd));box-shadow:var(--sh)}
-.kedit{border:none;border-bottom:2px solid var(--tc,var(--bd));background:transparent;font-family:var(--fh);font-size:26px;font-weight:800;width:70px;outline:none}
-.fta{width:100%;border:1px solid var(--bd);border-radius:8px;padding:9px 11px;font-family:var(--fb);font-size:12px;background:var(--bg);resize:vertical}
-
-/* MODAL MEJORADO */
+/* MODAL Y HISTORIAL */
 #modalReporte{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:9999;align-items:center;justify-content:center}
 .modal-content{background:#fff;padding:24px;border-radius:16px;max-width:550px;width:100%; position:relative}
-.close-btn { position:absolute; top:15px; right:20px; font-size:24px; cursor:pointer; font-weight:800; color:var(--t3)}
+.close-btn { position:absolute; top:15px; right:20px; font-size:24px; cursor:pointer; color:var(--t3)}
 #reportTextArea{width:100%;height:350px;font-family:var(--fm);font-size:12px;padding:12px;background:#f8f9fa;resize:none;border:1px solid var(--bd)}
-
-/* HISTORIAL */
 .hist-v5 {margin-top:20px; background:var(--sf); padding:15px; border-radius:12px; border:1px solid var(--bd); box-shadow:var(--sh)}
 </style>
 
@@ -62,41 +51,65 @@ body{font-family:var(--fb);background:var(--bg);color:var(--t1);font-size:13px;l
 
     <div id="panel-dashboard" class="tab-panel active">
         <div class="hdr">
-            <div><div class="brand">FIBRA<span>ZO</span> — NOC</div><div style="font-size:11px; opacity:0.6">G:\Mi unidad\Automatización · Panel Maestro</div></div>
+            <div><div class="brand">FIBRA<span>ZO</span> — NOC</div><div style="font-size:11px; opacity:0.6">Panel Maestro de Red · Operaciones</div></div>
             <div style="text-align:right"><div id="hdrDate" style="font-weight:700"></div><div id="liveClock" style="font-family:var(--fm); opacity:0.5"></div></div>
         </div>
 
-        <div class="rbar">
-            <div class="rbar-l"><div class="ldot"></div><span>Datos en tiempo real desde Gmail</span><span id="lastUpd" style="font-size:11px;color:var(--t3)">· Cargando...</span></div>
-            <button class="tab-btn active" style="padding:5px 12px; font-size:11px" onclick="location.reload()">↻ Actualizar ahora</button>
-        </div>
-
         <div class="kgrid">
-            <a href="#sec-odoo" class="kpi" style="--kc:#EF9F27"><div style="font-size:10px">Odoo Abiertos</div><div class="kpi-v">4</div><div class="kpi-s">Activos hoy</div></a>
-            <a href="#sec-tv" class="kpi" style="--kc:#EF4444"><div style="font-size:10px">Fallas TV</div><div class="kpi-v">2</div><div class="kpi-s">Desde último reporte</div></a>
-            <a href="#sec-bitninja" class="kpi" style="--kc:#EF4444"><div style="font-size:10px">BitNinja (3d)</div><div class="kpi-v">2</div><div class="kpi-s">Últimos 3 días</div></a>
-            <a href="#sec-mops" class="kpi" style="--kc:#1DB954"><div style="font-size:10px">MOPs Activos</div><div class="kpi-v">1</div><div class="kpi-s">Próximo: 16 Mar · 4 AM</div></a>
-            <a href="#sec-liberty" class="kpi" style="--kc:#3B82F6"><div style="font-size:10px">Liberty (5d)</div><div class="kpi-v">1</div><div class="kpi-s">Últimos 5 días</div></a>
+            <div class="kpi" style="--kc:#EF9F27">
+                <div style="font-size:10px">ODOO NOC (CO/AR)</div>
+                <div class="kpi-v">23</div> <div class="kpi-s">21 CO · 2 AR Abiertos</div>
+            </div>
+            <div class="kpi" style="--kc:#EF4444"><div style="font-size:10px">Fallas TV</div><div class="kpi-v">4</div><div class="kpi-s">2 Masivos · 2 Alertas</div></div>
+            <div class="kpi" style="--kc:#EF4444"><div style="font-size:10px">BitNinja</div><div class="kpi-v">2</div><div class="kpi-s">Amenazas detectadas</div></div>
+            <div class="kpi" style="--kc:#1DB954"><div style="font-size:10px">MOPs Activos</div><div class="kpi-v">1</div><div class="kpi-s">POP OLT 1 Cartagena</div></div>
+            <div class="kpi" style="--kc:#3B82F6"><div style="font-size:10px">Liberty / C&W</div><div class="kpi-v">1</div><div class="kpi-s">Ticket #893170</div></div>
         </div>
 
         <div class="g2">
-            <div class="card" id="sec-odoo">
-                <div class="ch"><span>📋 Tickets ODOO — Sin Cerrar</span> <span class="bdg br">Filtrado Activo</span></div>
+            <div class="card">
+                <div class="ch"><span>🇨🇴 BANDEJA NOC COLOMBIA</span> <span class="bdg br">21 ABIERTOS</span></div>
                 <div class="cb">
                     <table class="tbl">
-                        <tr><th>Ticket</th><th>Sitio / Área</th><th>Estado</th><th>SLA / Tiempo Reg.</th></tr>
-                        <tr><td><span class="iti">#289192</span></td><td>PER-OLT01 · Cartagena</td><td><span class="bdg br">Nuevo</span></td><td>0h 45m</td></tr>
-                        <tr><td><span class="iti">#289201</span></td><td><b>NOC Argentina</b> · Core</td><td><span class="bdg br">En Proceso</span></td><td>1h 15m</td></tr>
-                        <tr><td><span class="iti">#289210</span></td><td><b>NOC Colombia</b> · Troncal</td><td><span class="bdg br">Asignado</span></td><td>2h 10m</td></tr>
-                        <tr><td><span class="iti">#288980</span></td><td>CAR-OLT03 · Barranquilla</td><td><span class="bdg by">Pendiente</span></td><td><strong style="color:#EF4444">38h 15m ⚠</strong></td></tr>
+                        <tr><th>Ticket</th><th>Sitio</th><th>Prioridad</th><th>Estado</th></tr>
+                        <tr><td>#289192</td><td>PER-OLT01</td><td>Alta</td><td><span class="bdg br">Urgente</span></td></tr>
+                        <tr><td>#288980</td><td>CAR-OLT03</td><td>Baja</td><td><span class="bdg by">Pendiente</span></td></tr>
+                        <tr><td>#289210</td><td>TRONCAL</td><td>Media</td><td><span class="bdg bb">Asignado</span></td></tr>
+                        <tr><td colspan="4" style="text-align:center; font-size:10px; color:var(--t3)">+ 18 tickets adicionales en bandeja</td></tr>
                     </table>
                 </div>
             </div>
-            <div class="card" id="sec-tv">
-                <div class="ch"><span>📺 Monitor TV</span></div>
+            <div class="card">
+                <div class="ch"><span>🇦🇷 BANDEJA NOC ARGENTINA</span> <span class="bdg bb">2 ABIERTOS</span></div>
                 <div class="cb">
-                    <div class="bnr" style="background:#FEF2F2; color:#991B1B">Canal AZ Corazón: DOWN desde hace 4h</div>
-                    <div class="bnr" style="background:#FEF2F2; color:#991B1B">RedBull TV: Falla de origen (Desde reporte 18/03)</div>
+                    <table class="tbl">
+                        <tr><th>Ticket</th><th>Detalle</th><th>SLA</th><th>Estado</th></tr>
+                        <tr><td>#289201</td><td>CORE BSAS</td><td>1h 15m</td><td><span class="bdg br">En Proceso</span></td></tr>
+                        <tr><td>#289205</td><td>INTERNACIONAL</td><td>2h 30m</td><td><span class="bdg br">Nuevo</span></td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="ch"><span>📊 RESUMEN EJECUTIVO — REPORTES PROVEEDORES</span></div>
+            <div class="cb">
+                <div class="g3">
+                    <div style="background:var(--bg); padding:10px; border-radius:8px">
+                        <div style="font-weight:700; font-size:10px">MONITOR TV</div>
+                        <div style="color:#991B1B; font-size:11px; margin-top:5px">• Canal AZ Corazón: DOWN (4h)</div>
+                        <div style="color:#991B1B; font-size:11px">• RedBull TV: Falla Origen</div>
+                    </div>
+                    <div style="background:var(--bg); padding:10px; border-radius:8px">
+                        <div style="font-weight:700; font-size:10px">BITNINJA ALERTS</div>
+                        <div style="color:var(--t1); font-size:11px; margin-top:5px">• 77.247.120.128 (Activo)</div>
+                        <div style="color:var(--t1); font-size:11px">• 185.220.101.44 (Bloqueado)</div>
+                    </div>
+                    <div style="background:var(--bg); padding:10px; border-radius:8px">
+                        <div style="font-weight:700; font-size:10px">LIBERTY / C&W</div>
+                        <div style="color:#92400E; font-size:11px; margin-top:5px">• #893170: Clareado Pendiente</div>
+                        <div style="color:var(--t3); font-size:10px">SLA: 72 horas excedido</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -105,59 +118,43 @@ body{font-family:var(--fb);background:var(--bg);color:var(--t1);font-size:13px;l
     <div id="panel-turno" class="tab-panel">
         <div style="background:var(--bk); padding:20px; border-radius:16px; color:#fff; margin-bottom:12px">
             <div style="display:flex; gap:8px; margin-bottom:15px">
-                <div class="pill pill-g active" onclick="setPill(this, '🟢 TURNO LIMPIO')">🟢 TURNO LIMPIO</div>
-                <div class="pill pill-y" onclick="setPill(this, '🟡 CON PENDIENTES')">🟡 CON PENDIENTES</div>
-                <div class="pill pill-r" onclick="setPill(this, '🔴 ALERTA ACTIVA')">🔴 ALERTA ACTIVA</div>
+                <div class="pill pill-g active" id="p-limpio" onclick="setPill('🟢 TURNO LIMPIO')">🟢 TURNO LIMPIO</div>
+                <div class="pill pill-y" id="p-pend" onclick="setPill('🟡 CON PENDIENTES')">🟡 CON PENDIENTES</div>
+                <div class="pill pill-r" id="p-crit" onclick="setPill('🔴 ALERTA ACTIVA')">🔴 ALERTA ACTIVA</div>
             </div>
             <div class="g3">
                 <div class="col"><label style="font-size:10px; opacity:0.6">INGENIERO SALIENTE</label>
-                    <select class="tfs" id="sel-ing" onchange="document.getElementById('ing-name').textContent = this.value">
+                    <select class="fta" id="sel-ing" style="background:rgba(255,255,255,0.1); color:white; border:none;" onchange="document.getElementById('ing-name').textContent = this.value">
                         <option value="">Seleccionar...</option>
                         <option>Jhon Lopez</option><option>Joseph Montenegro</option><option>Jack Osma</option>
-                        <option>Durbey Toro</option><option>Facundo Oliva 🇦🇷</option><option>Luisa Benitez</option>
                     </select>
                 </div>
                 <div class="col"><label style="font-size:10px; opacity:0.6">TURNO</label>
-                    <select class="tfs" id="sel-franja"><option>06:00 - 12:00</option><option>12:00 - 18:00</option><option>18:00 - 00:00</option><option>00:00 - 06:00</option></select>
+                    <select class="fta" id="sel-franja" style="background:rgba(255,255,255,0.1); color:white; border:none;"><option>06:00 - 12:00</option><option>12:00 - 18:00</option><option>18:00 - 00:00</option></select>
                 </div>
-                <div class="col"><label style="font-size:10px; opacity:0.6">FECHA</label><input type="date" class="tfs" id="sel-fecha"></div>
+                <div class="col"><label style="font-size:10px; opacity:0.6">FECHA</label><input type="date" class="fta" id="sel-fecha" style="background:rgba(255,255,255,0.1); color:white; border:none;"></div>
             </div>
         </div>
+
         <div class="tkr">
             <div class="tkpi" style="--tc:#EF9F27"><div style="font-size:10px">Issues</div><input class="kedit" type="number" value="2" id="val-issues"></div>
+            <div class="tkpi" style="--tc:#EF4444"><div style="font-size:10px">Odoo (Suma)</div><input class="kedit" type="number" value="23" id="val-odoo"></div>
+            <div class="tkpi" style="--tc:#3B82F6"><div style="font-size:10px">Fallas TV</div><input class="kedit" type="number" value="4" id="val-tv"></div>
             <div class="tkpi" style="--tc:#1DB954"><div style="font-size:10px">MOPs</div><input class="kedit" type="number" value="0" id="val-mops"></div>
-            <div class="tkpi" style="--tc:#3B82F6"><div style="font-size:10px">TV</div><input class="kedit" type="number" value="4" id="val-tv"></div>
-            <div class="tkpi" style="--tc:#EF4444"><div style="font-size:10px">Odoo</div><input class="kedit" type="number" value="49" id="val-odoo"></div>
         </div>
+
         <div class="card">
             <div class="ch">Tickets del Turno: <span id="ing-name" style="color:var(--g)">-</span></div>
             <div class="cb">
-                <div class="ticket-manager">
-                    <div class="tm-col">
-                        <div style="font-size:10px; font-weight:800">🟢 GESTIONADOS <span id="c-gest" class="bdg bg">0</span></div>
-                        <div id="list-gest"><input type="text" class="t-input" onchange="countTickets('gest')"></div>
-                        <button class="tab-btn" style="width:100%; font-size:10px" onclick="addTicketInput('list-gest', 'gest')">+ Adicionar</button>
-                    </div>
-                    <div class="tm-col">
-                        <div style="font-size:10px; font-weight:800">🔵 CREADOS <span id="c-crea" class="bdg bb">0</span></div>
-                        <div id="list-crea"><input type="text" class="t-input" onchange="countTickets('crea')"></div>
-                        <button class="tab-btn" style="width:100%; font-size:10px" onclick="addTicketInput('list-crea', 'crea')">+ Adicionar</button>
-                    </div>
-                    <div class="tm-col">
-                        <div style="font-size:10px; font-weight:800">🟡 ASIGNADOS <span id="c-asig" class="bdg by">0</span></div>
-                        <div id="list-asig"><input type="text" class="t-input" onchange="countTickets('asig')"></div>
-                        <button class="tab-btn" style="width:100%; font-size:10px" onclick="addTicketInput('list-asig', 'asig')">+ Adicionar</button>
-                    </div>
-                </div>
                 <textarea id="prioridades" class="fta" style="margin-top:10px; border-color:#F59E0B" placeholder="Prioridades Relevo..."></textarea>
-                <textarea id="resumen-turno" class="fta" style="margin-top:10px" placeholder="Novedades Generales..."></textarea>
-                <button onclick="generarReporte()" style="width:100%; padding:12px; margin-top:10px; background:var(--bk); color:#fff; border:none; border-radius:8px; cursor:pointer">✓ GENERAR REPORTE</button>
+                <textarea id="resumen-turno" class="fta" style="margin-top:10px; border:2px solid var(--g)" placeholder="Novedades Generales (WhatsApp)..."></textarea>
+                <button onclick="generarReporte()" style="width:100%; padding:12px; margin-top:10px; background:var(--bk); color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:700">✓ GENERAR REPORTE WHATSAPP</button>
             </div>
         </div>
 
         <div class="hist-v5">
             <div style="font-weight:800; font-size:11px; margin-bottom:10px; color:var(--t2)">📂 HISTORIAL DE ENTREGAS RECIENTES</div>
-            <table class="tbl" id="historialTable">
+            <table class="tbl">
                 <thead><tr><th>Fecha</th><th>Ingeniero</th><th>Turno</th><th>Métricas</th></tr></thead>
                 <tbody id="historialBody"></tbody>
             </table>
@@ -174,14 +171,14 @@ body{font-family:var(--fb);background:var(--bg);color:var(--t1);font-size:13px;l
 
 <div id="modalReporte"><div class="modal-content">
     <span class="close-btn" onclick="document.getElementById('modalReporte').style.display='none'">×</span>
-    <div style="font-weight:800; margin-bottom:10px">REPORTE WHATSAPP</div>
+    <div style="font-weight:800; margin-bottom:10px; font-family:var(--fh)">REPORTE WHATSAPP</div>
     <textarea id="reportTextArea" readonly></textarea>
-    <button id="btnCopiar" onclick="copiarReporte()" style="width:100%; padding:10px; margin-top:10px; background:var(--g); color:#fff; border:none; border-radius:8px">Copiar al Portapapeles</button>
+    <button id="btnCopiar" onclick="copiarReporte()" style="width:100%; padding:10px; margin-top:10px; background:var(--g); color:#fff; border:none; border-radius:8px; font-weight:700">Copiar al Portapapeles</button>
 </div></div>
 
 <script>
-/* --- LÓGICA RECONSTRUIDA --- */
 let historialData = JSON.parse(localStorage.getItem('historialNOC')) || [];
+let estadoActual = "🟢 TURNO LIMPIO";
 
 function updateClock() {
     const now = new Date();
@@ -200,21 +197,12 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     });
 });
 
-let estadoAct = "🟢 TURNO LIMPIO";
-function setPill(el, txt) {
+function setPill(txt) {
+    estadoActual = txt;
     document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-    el.classList.add('active'); estadoAct = txt;
-}
-function addTicketInput(id, type) {
-    const container = document.getElementById(id);
-    const input = document.createElement('input');
-    input.type="text"; input.className="t-input"; input.onchange=()=>countTickets(type);
-    container.appendChild(input);
-}
-function countTickets(type) {
-    const inputs = document.querySelectorAll(`#list-${type} .t-input`);
-    let c = 0; inputs.forEach(i => { if(i.value.trim()!=="") c++; });
-    document.getElementById(`c-${type}`).textContent = c;
+    if(txt.includes("LIMPIO")) document.getElementById('p-limpio').classList.add('active');
+    if(txt.includes("PENDIENTES")) document.getElementById('p-pend').classList.add('active');
+    if(txt.includes("ALERTA")) document.getElementById('p-crit').classList.add('active');
 }
 
 function generarReporte() {
@@ -228,22 +216,21 @@ function generarReporte() {
     const p = document.getElementById('prioridades').value || "Sin prioridades registradas";
     const n = document.getElementById('resumen-turno').value || "Sin novedades adicionales";
 
-    const texto = `*ENTREGA DE TURNO NOC*\nIngeniero: ${ing}\nEstado: ${estadoAct}\n\n*MÉTRICAS:*\nIssues: ${iss}\nBandeja Odoo: ${od}\nFallas TV: ${tv}\nMOPs: ${mops}\n\n*PRIORIDADES:*\n${p}\n\n*NOVEDADES GENERALES:*\n${n}`;
+    const texto = `*ENTREGA DE TURNO NOC*\n\n*Ingeniero:* ${ing}\n*Turno:* ${document.getElementById('sel-franja').value}\n*Estado:* ${estadoActual}\n\n*MÉTRICAS:*\nIssues: ${iss}\nBandeja Odoo: ${od}\nFallas TV: ${tv}\nMOPs: ${mops}\n\n*PRIORIDADES RELEVO:*\n${p}\n\n*NOVEDADES GENERALES:*\n${n}\n\n_Generado: ${new Date().toLocaleTimeString()}_`;
     
     document.getElementById('reportTextArea').value = texto;
     document.getElementById('modalReporte').style.display = 'flex';
 
-    // Guardar en historial
-    const reg = { fecha: new Date().toLocaleDateString(), ing, turno: document.getElementById('sel-franja').value, res: `I:${iss} | B:${od} | TV:${tv}` };
-    historialData.unshift(reg); if(historialData.length > 10) historialData.pop();
+    historialData.unshift({ fecha: new Date().toLocaleDateString(), ing, turno: document.getElementById('sel-franja').value, res: `I:${iss} | B:${od} | TV:${tv}` });
+    if(historialData.length > 10) historialData.pop();
     localStorage.setItem('historialNOC', JSON.stringify(historialData));
     renderHistorial();
 }
 
 function copiarReporte() {
     const btn = document.getElementById('btnCopiar');
-    document.getElementById('reportTextArea').select();
-    document.execCommand('copy');
+    const area = document.getElementById('reportTextArea');
+    area.select(); document.execCommand('copy');
     btn.textContent = "¡COPIADO!";
     setTimeout(() => { 
         document.getElementById('modalReporte').style.display='none';
@@ -258,16 +245,13 @@ function renderHistorial() {
 
 function initCharts() {
     new Chart(document.getElementById('chart-h'), {
-        type: 'bar', data: { labels: ['Jhon', 'Joseph', 'Jack', 'Durbey', 'Facundo', 'Luisa'],
-        datasets: [{ label: 'Diurno', data: [36, 60, 30, 42, 18, 36], backgroundColor: '#1DB954' },
-        { label: 'Nocturno', data: [36, 0, 30, 36, 54, 30], backgroundColor: '#8B5CF6' }] },
-        options: { indexAxis: 'y', maintainAspectRatio: false, scales: { x: { stacked: true }, y: { stacked: true } } }
+        type: 'bar', data: { labels: ['Jhon', 'Joseph', 'Jack'], datasets: [{ label: 'Horas Mes', data: [120, 150, 80], backgroundColor: '#1DB954' }] },
+        options: { indexAxis: 'y', maintainAspectRatio: false }
     });
     new Chart(document.getElementById('chart-t'), {
-        type: 'doughnut', data: { labels: ['06-12', '12-18', '18-00', '00-06'],
-        datasets: [{ data: [12, 10, 6, 8], backgroundColor: ['#1DB954', '#3B82F6', '#F59E0B', '#8B5CF6'] }] },
+        type: 'doughnut', data: { labels: ['06-12', '12-18', '18-00'], datasets: [{ data: [12, 10, 6], backgroundColor: ['#1DB954', '#3B82F6', '#EF4444'] }] },
         options: { maintainAspectRatio: false }
     });
 }
-window.onload = () => { renderHistorial(); document.getElementById('sel-fecha').valueAsDate = new Date(); };
+window.onload = () => { renderHistorial(); document.getElementById('sel-fecha').value = new Date().toISOString().split('T')[0]; };
 </script>

@@ -1,284 +1,314 @@
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-<style>
-/* ═══ ESTILOS BASE ═══ */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--g:#1DB954;--gd:#15883C;--gl:#E8F8EE;--bk:#0D0D0D;--bg:#F2F3F5;--sf:#fff;--bd:#E8E9EC;--t1:#0D0D0D;--t2:#555E6B;--t3:#9AA0AB;--fh:'Syne',sans-serif;--fb:'DM Sans',sans-serif;--fm:'DM Mono',monospace;--sh:0 1px 4px rgba(0,0,0,.07),0 0 0 1px rgba(0,0,0,.04)}
-body{font-family:var(--fb);background:var(--bg);color:var(--t1);font-size:13px;line-height:1.5}
-.wrap{max-width:1080px;margin:0 auto;padding:20px 16px 40px}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
-.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-.tab-nav{display:flex;gap:4px;margin-bottom:16px;background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:5px;width:fit-content}
-.tab-btn{display:flex;align-items:center;gap:7px;padding:7px 18px;border-radius:8px;border:none;background:transparent;font-family:var(--fb);font-size:13px;font-weight:500;color:var(--t2);cursor:pointer;transition:all .18s;white-space:nowrap}
-.tab-btn.active{background:var(--bk);color:#fff}
-.tab-dot{width:7px;height:7px;border-radius:50%;background:var(--t3);flex-shrink:0}
-.tab-btn.active .tab-dot{background:var(--g)}
-.tab-panel{display:none}.tab-panel.active{display:block}
-.hdr{background:var(--bk);border-radius:16px;padding:20px 24px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;color:#fff}
-.brand{font-family:var(--fh);font-size:16px;font-weight:800}.brand span{color:var(--g)}
-.rbar{display:flex;align-items:center;justify-content:space-between;background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:8px 14px;margin-bottom:12px;gap:10px}
-.rbar-l{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--t2)}
-.ldot{width:7px;height:7px;border-radius:50%;background:var(--g);animation:pulse 2s ease infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-.kgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-bottom:12px}
-.kpi{background:var(--sf);border-radius:12px;padding:14px;border-top:3px solid var(--kc,var(--bd));box-shadow:var(--sh);text-decoration:none;color:inherit;cursor:pointer}
-.kpi-v{font-family:var(--fh);font-size:28px;font-weight:800;line-height:1}
-.kpi-s{font-size:11px;color:var(--t3);margin-top:4px}
-.card{background:var(--sf);border-radius:12px;border:1px solid var(--bd);overflow:hidden;margin-bottom:12px}
-.ch{padding:11px 14px;border-bottom:1px solid var(--bd);font-weight:700;display:flex;justify-content:space-between}
-.cb{padding:12px 14px}
-.tbl{width:100%;border-collapse:collapse;font-size:12px}
-.tbl th{text-align:left;padding:4px 7px;color:var(--t3);border-bottom:1px solid var(--bd);font-size:10px;text-transform:uppercase}
-.tbl td{padding:6px 7px;border-bottom:1px solid #F5F6F8}
-.bdg{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:600}
-.br{background:#FEE2E2;color:#991B1B}.bg{background:var(--gl);color:var(--gd)}.bb{background:#DBEAFE;color:#1E40AF}.by{background:#FEF3C7;color:#92400E}
-.iti{font-family:var(--fm);font-size:10px;background:#F3F4F6;padding:2px 6px;border-radius:4px;text-decoration:none;color:inherit}
-.bnr{padding:7px 10px;border-radius:8px;font-size:12px;margin-bottom:10px;border-left:3px solid transparent}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOC Dashboard — Fibrazo V5</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+    <style>
+        /* Estilos base existentes */
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        :root{--g:#1DB954;--gd:#15883C;--gl:#E8F8EE;--bk:#0D0D0D;--bg:#F2F3F5;--sf:#fff;--bd:#E8E9EC;--t1:#0D0D0D;--t2:#555E6B;--t3:#9AA0AB;--fh:'Syne',sans-serif;--fb:'DM Sans',sans-serif;--fm:'DM Mono',monospace;--sh:0 1px 4px rgba(0,0,0,.07),0 0 0 1px rgba(0,0,0,.04)}
+        body{font-family:var(--fb);background:var(--bg);color:var(--t1);font-size:13px;line-height:1.5}
+        .wrap{max-width:1080px;margin:0 auto;padding:20px 16px 40px}
+        .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+        .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+        .col{display:flex;flex-direction:column;gap:12px}
+        
+        /* Estilos de Tabs y Headers (los que ya tenías) */
+        .tab-nav{display:flex;gap:4px;margin-bottom:16px;background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:5px;width:fit-content}
+        .tab-btn{display:flex;align-items:center;gap:7px;padding:7px 18px;border-radius:8px;border:none;background:transparent;font-family:var(--fb);font-size:13px;font-weight:500;color:var(--t2);cursor:pointer;transition:all .18s;white-space:nowrap}
+        .tab-btn.active{background:var(--bk);color:#fff}
+        .tab-dot{width:7px;height:7px;border-radius:50%;background:var(--t3);flex-shrink:0}
+        .tab-btn.active .tab-dot{background:var(--g)}
+        .tab-panel{display:none}
+        .tab-panel.active{display:block;animation:fadeUp .3s ease}
 
-/* ═══ ENTREGA DE TURNO ═══ */
-.pill{padding:6px 12px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--bd);opacity:0.4}.pill.active{opacity:1;transform:scale(1.05)}
-.tm-col{background:#f9fafb;padding:12px;border-radius:10px;border:1px solid var(--bd)}
-.t-input{width:100%;border:1px solid var(--bd);border-radius:6px;padding:5px;font-size:11px;font-family:var(--fm);margin-bottom:5px}
-.tkpi{background:var(--sf);border-radius:12px;padding:12px 14px;border-left:3px solid var(--tc,var(--bd));box-shadow:var(--sh)}
-.kedit{border:none;border-bottom:2px solid var(--tc,var(--bd));background:transparent;font-family:var(--fh);font-size:26px;font-weight:800;width:70px;outline:none}
+        /* --- MODAL V5 --- */
+        .modal {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+            display: none; align-items: center; justify-content: center; z-index: 10000;
+        }
+        .modal-content {
+            background: var(--sf); padding: 24px; border-radius: 16px; width: 90%; max-width: 500px;
+            position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .close-modal {
+            position: absolute; top: 15px; right: 20px; font-size: 24px;
+            cursor: pointer; color: var(--t3);
+        }
+        #textoReporte {
+            background: var(--bg); padding: 15px; border-radius: 8px;
+            font-family: var(--fm); font-size: 11px; white-space: pre-wrap;
+            margin: 15px 0; border: 1px solid var(--bd); max-height: 300px; overflow-y: auto;
+        }
 
-/* MOPs LIST */
-.mi{display:flex;gap:9px;padding:7px 0;border-bottom:1px solid var(--bd)}
-.mi:last-child{border-bottom:none}
-.md{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:3px}
-.mt{font-size:12px;font-weight:600}.mm{font-size:11px;color:var(--t3)}
+        /* --- HISTORIAL V5 --- */
+        .hist-v5 {
+            margin-top: 24px; background: var(--sf); border: 1px solid var(--bd);
+            border-radius: 12px; padding: 20px; box-shadow: var(--sh);
+        }
+        .htbl { width: 100%; border-collapse: collapse; font-size: 12px; }
+        .htbl th { text-align: left; padding: 8px; color: var(--t3); border-bottom: 1px solid var(--bd); font-size: 10px; text-transform: uppercase; }
+        .htbl td { padding: 10px 8px; border-bottom: 1px solid #f5f5f5; }
 
-/* MODAL */
-#modalReporte{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:9999;align-items:center;justify-content:center}
-.modal-content{background:#fff;padding:24px;border-radius:16px;max-width:550px;width:100%}
-#reportTextArea{width:100%;height:350px;font-family:var(--fm);font-size:12px;padding:12px;background:#f8f9fa;resize:none;border:1px solid var(--bd)}
-</style>
+        /* Otros estilos necesarios de tu código original (abreviados por espacio) */
+        .hdr{background:var(--bk);border-radius:16px;padding:20px 24px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;color:white}
+        .kgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-bottom:12px}
+        .kpi{background:var(--sf);border-radius:12px;padding:14px;border-top:3px solid var(--kc);box-shadow:var(--sh)}
+        .kpi-v{font-family:var(--fh);font-size:28px;font-weight:800}
+        .thdr{background:var(--bk);border-radius:16px;padding:18px 22px;margin-bottom:12px;color:white}
+        .tkr{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:12px}
+        .tkpi{background:var(--sf);border-radius:12px;padding:12px 14px;border-left:3px solid var(--tc);box-shadow:var(--sh)}
+        .kedit{border:none;border-bottom:2px solid var(--tc);font-size:26px;font-weight:800;width:60px;outline:none;background:transparent}
+        .fta{width:100%;border:1px solid var(--bd);border-radius:8px;padding:10px;font-family:var(--fb);resize:vertical}
+        .btns, .btnp { cursor: pointer; transition: 0.2s; }
+        .btnp:active { transform: scale(0.98); }
+        @media(max-width:720px){.kgrid,.tkr{grid-template-columns:1fr 1fr}.g2,.g3{grid-template-columns:1fr}}
+    </style>
+</head>
+<body>
 
 <div class="wrap">
     <div class="tab-nav">
-        <button class="tab-btn active" data-tab="dashboard"><span class="tab-dot"></span>Dashboard NOC</button>
-        <button class="tab-btn" data-tab="turno"><span class="tab-dot"></span>Entrega de Turno</button>
-        <button class="tab-btn" data-tab="registro"><span class="tab-dot"></span>Registro & Analítica</button>
+        <button class="tab-btn active" onclick="switchTab('dashboard', this)"><span class="tab-dot"></span>Dashboard NOC</button>
+        <button class="tab-btn" onclick="switchTab('turno', this)"><span class="tab-dot"></span>Entrega de Turno</button>
+        <button class="tab-btn" onclick="switchTab('registro', this)"><span class="tab-dot"></span>Registro & Analítica</button>
     </div>
 
-    <div id="panel-dashboard" class="tab-panel active">
+    <div class="tab-panel active" id="panel-dashboard">
         <div class="hdr">
-            <div><div class="brand">FIBRA<span>ZO</span> — NOC</div><div style="font-size:11px; opacity:0.6">G:\Mi unidad\Automatización · Panel Maestro</div></div>
-            <div style="text-align:right"><div id="hdrDate" style="font-weight:700"></div><div id="liveClock" style="font-family:var(--fm); opacity:0.5"></div></div>
+            <div><h2 class="brand">FIBRA<span>ZO</span> — NOC</h2></div>
+            <div id="liveClock">--:--:--</div>
         </div>
-
-        <div class="rbar">
-            <div class="rbar-l"><div class="ldot"></div><span>Datos en tiempo real desde Gmail</span><span id="lastUpd" style="font-size:11px;color:var(--t3)">· Cargando...</span></div>
-            <button class="tab-btn active" style="padding:5px 12px; font-size:11px" onclick="location.reload()">↻ Actualizar ahora</button>
-        </div>
-
         <div class="kgrid">
-            <a href="#sec-odoo" class="kpi" style="--kc:#EF9F27"><div style="font-size:10px">Odoo Abiertos</div><div class="kpi-v">4</div><div class="kpi-s">Activos hoy</div></a>
-            <a href="#sec-tv" class="kpi" style="--kc:#EF4444"><div style="font-size:10px">Fallas TV</div><div class="kpi-v">2</div><div class="kpi-s">Desde último reporte</div></a>
-            <a href="#sec-bitninja" class="kpi" style="--kc:#EF4444"><div style="font-size:10px">BitNinja (3d)</div><div class="kpi-v">2</div><div class="kpi-s">Últimos 3 días</div></a>
-            <a href="#sec-mops" class="kpi" style="--kc:#1DB954"><div style="font-size:10px">MOPs Activos</div><div class="kpi-v">1</div><div class="kpi-s">Próximo: 16 Mar · 4 AM</div></a>
-            <a href="#sec-liberty" class="kpi" style="--kc:#3B82F6"><div style="font-size:10px">Liberty (5d)</div><div class="kpi-v">1</div><div class="kpi-s">Últimos 5 días</div></a>
-        </div>
-
-        <div class="g2">
-            <div class="card" id="sec-odoo">
-                <div class="ch"><span>📋 Tickets ODOO — Sin Cerrar</span> <span class="bdg br">Filtrado Activo</span></div>
-                <div class="cb">
-                    <table class="tbl">
-                        <tr><th>Ticket</th><th>Sitio / Área</th><th>Estado</th><th>SLA / Tiempo Reg.</th></tr>
-                        <tr><td><span class="iti">#289192</span></td><td>PER-OLT01 · Cartagena</td><td><span class="bdg br">Nuevo</span></td><td>0h 45m</td></tr>
-                        <tr><td><span class="iti">#289201</span></td><td><b>NOC Argentina</b> · Core</td><td><span class="bdg br">En Proceso</span></td><td>1h 15m</td></tr>
-                        <tr><td><span class="iti">#289210</span></td><td><b>NOC Colombia</b> · Troncal</td><td><span class="bdg br">Asignado</span></td><td>2h 10m</td></tr>
-                        <tr><td><span class="iti">#288980</span></td><td>CAR-OLT03 · Barranquilla</td><td><span class="bdg by">Pendiente</span></td><td><strong style="color:#EF4444">38h 15m ⚠</strong></td></tr>
-                    </table>
-                </div>
-            </div>
-            <div class="card" id="sec-tv">
-                <div class="ch"><span>📺 Monitor TV</span></div>
-                <div class="cb">
-                    <div class="bnr" style="background:#FEF2F2; color:#991B1B">Canal AZ Corazón: DOWN desde hace 4h</div>
-                    <div class="bnr" style="background:#FEF2F2; color:#991B1B">RedBull TV: Falla de origen (Desde reporte 18/03)</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="g2">
-            <div class="card" id="sec-bitninja">
-                <div class="ch"><span>🛡️ Seguridad — BitNinja (3 días)</span></div>
-                <div class="cb">
-                    <table class="tbl">
-                        <tr><th>IP Atacante</th><th>Detección</th><th>Estado</th></tr>
-                        <tr><td><span class="iti">77.247.120.128</span></td><td>14 Mar · 08:30 (Hace 24h)</td><td><span class="bdg br">Hoy</span></td></tr>
-                        <tr><td><span class="iti">185.220.101.44</span></td><td>13 Mar · 17:08 (Hace 48h)</td><td><span class="bdg by">Ayer</span></td></tr>
-                    </table>
-                </div>
-            </div>
-            <div class="card" id="sec-liberty">
-                <div class="ch"><span>🌐 Liberty / C&W (5 días)</span></div>
-                <div class="cb">
-                    <div style="font-size:13px;font-weight:700;margin-bottom:4px">Ticket #893170 · DEGRADACIÓN CI1033988</div>
-                    <div style="font-size:12px;color:var(--t2);margin-bottom:9px">Reportado: hace 3 días · <strong style="color:#92400E">~72 horas</strong></div>
-                    <div class="bnr" style="background:#FFFBEB; color:#92400E; border-left:3px solid #F59E0B">⚠ Pendiente: clareado solicitado por C&W.</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card" id="sec-mops">
-            <div class="ch"><span>🔧 MOPs — Bandeja "MOPs Fibrazo & Proveedores"</span></div>
-            <div class="cb">
-                <div class="mi"><div class="md" style="background:#F59E0B"></div><div><div class="mt">Intercambio de Board · POP OLT 1</div><div class="mm">Lunes 23 Mar · 4:00 AM · La Popa, Cartagena</div></div></div>
-            </div>
+            <div class="kpi" style="--kc:#EF9F27">Tickets ODOO<div class="kpi-v">11</div></div>
+            <div class="kpi" style="--kc:#EF4444">Canales TV<div class="kpi-v">4</div></div>
+            <div class="kpi" style="--kc:#EF4444">BitNinja<div class="kpi-v">2</div></div>
+            <div class="kpi" style="--kc:#1DB954">MOPs<div class="kpi-v">1</div></div>
+            <div class="kpi" style="--kc:#3B82F6">Liberty<div class="kpi-v">1</div></div>
         </div>
     </div>
 
-    <div id="panel-turno" class="tab-panel">
-        <div style="background:var(--bk); padding:20px; border-radius:16px; color:#fff; margin-bottom:12px">
-            <div style="display:flex; gap:8px; margin-bottom:15px">
-                <div class="pill pill-g active" onclick="setPill(this, '🟢 TURNO LIMPIO')">🟢 TURNO LIMPIO</div>
-                <div class="pill pill-y" onclick="setPill(this, '🟡 CON PENDIENTES')">🟡 CON PENDIENTES</div>
-                <div class="pill pill-r" onclick="setPill(this, '🔴 ALERTA ACTIVA')">🔴 ALERTA ACTIVA</div>
-            </div>
-            <div class="g3">
-                <div class="col"><label style="font-size:10px; opacity:0.6">INGENIERO SALIENTE</label>
-                    <select class="tfs" id="sel-ing" onchange="document.getElementById('ing-name').textContent = this.value">
-                        <option value="">Seleccionar...</option>
-                        <option>Jhon Lopez</option><option>Joseph Montenegro</option><option>Jack Osma</option>
-                        <option>Durbey Toro</option><option>Facundo Oliva 🇦🇷</option><option>Luisa Benitez</option>
+    <div class="tab-panel" id="panel-turno">
+        <div class="thdr">
+            <div style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:15px;">
+                <div><h3>Entrega de <span>Turno</span></h3><p style="font-size:11px;opacity:0.6">Registro oficial de novedades</p></div>
+                <div style="display:flex; gap:10px;">
+                    <select class="fta" id="sel-ing" style="width:160px">
+                        <option value="">Ingeniero...</option>
+                        <option>Jhon Lopez</option>
+                        <option>Joseph Montenegro</option>
+                        <option>Jack Osma</option>
                     </select>
+                    <select class="fta" id="sel-turno" style="width:140px">
+                        <option>06:00 - 12:00</option>
+                        <option>12:00 - 18:00</option>
+                        <option>18:00 - 00:00</option>
+                    </select>
+                    <input type="date" class="fta" id="sel-fecha" style="width:140px">
                 </div>
-                <div class="col"><label style="font-size:10px; opacity:0.6">TURNO</label>
-                    <select class="tfs" id="sel-franja"><option>06:00 - 12:00</option><option>12:00 - 18:00</option><option>18:00 - 00:00</option><option>00:00 - 06:00</option></select>
-                </div>
-                <div class="col"><label style="font-size:10px; opacity:0.6">FECHA</label><input type="date" class="tfs" id="sel-fecha"></div>
             </div>
         </div>
+
         <div class="tkr">
-            <div class="tkpi" style="--tc:#EF9F27"><div style="font-size:10px">Issues</div><input class="kedit" type="number" value="2" id="val-issues"></div>
-            <div class="tkpi" style="--tc:#1DB954"><div style="font-size:10px">MOPs</div><input class="kedit" type="number" value="0" id="val-mops"></div>
-            <div class="tkpi" style="--tc:#3B82F6"><div style="font-size:10px">TV</div><input class="kedit" type="number" value="4" id="val-tv"></div>
-            <div class="tkpi" style="--tc:#EF4444"><div style="font-size:10px">Odoo</div><input class="kedit" type="number" value="49"></div>
+            <div class="tkpi" style="--tc:#EF9F27">Issues<br><input class="kedit" type="number" value="2" id="kpi-issues"></div>
+            <div class="tkpi" style="--tc:#EF4444">Bandeja<br><input class="kedit" type="number" value="49" id="kpi-bandeja"></div>
+            <div class="tkpi" style="--tc:#3B82F6">TV Down<br><input class="kedit" type="number" value="4" id="kpi-tv"></div>
+            <div class="tkpi" style="--tc:#1DB954">MOPs<br><input class="kedit" type="number" value="0" id="kpi-mops"></div>
         </div>
-        <div class="card">
-            <div class="ch">Tickets del Turno: <span id="ing-name" style="color:var(--g)">-</span></div>
-            <div class="cb">
-                <div class="ticket-manager">
-                    <div class="tm-col">
-                        <div style="font-size:10px; font-weight:800">🟢 GESTIONADOS <span id="c-gest" class="bdg bg">0</span></div>
-                        <div id="list-gest"><input type="text" class="t-input" onchange="countTickets('gest')"></div>
-                        <button class="tab-btn" style="width:100%; font-size:10px" onclick="addTicketInput('list-gest', 'gest')">+ Adicionar</button>
+
+        <div class="card" style="margin-bottom:12px; border:2px solid var(--g)">
+            <div class="cb" style="background:white; padding:20px;">
+                <div class="g2">
+                    <div>
+                        <label style="font-size:10px; font-weight:700; color:var(--t3)">ESTADO DEL TURNO</label>
+                        <div style="display:flex; gap:10px; margin:10px 0;">
+                            <label><input type="radio" name="estado" value="🟢 TURNO LIMPIO" checked> Limpio</label>
+                            <label><input type="radio" name="estado" value="🟡 CON PENDIENTES"> Pendientes</label>
+                            <label><input type="radio" name="estado" value="🔴 ALERTA ACTIVA"> Alerta</label>
+                        </div>
+                        <label style="font-size:10px; font-weight:700; color:var(--t3)">PRIORIDADES DE RELEVO</label>
+                        <textarea id="prioridadesRelevo" class="fta" style="min-height:80px; margin-top:5px" placeholder="Tickets críticos para entregar..."></textarea>
                     </div>
-                    <div class="tm-col">
-                        <div style="font-size:10px; font-weight:800">🔵 CREADOS <span id="c-crea" class="bdg bb">0</span></div>
-                        <div id="list-crea"><input type="text" class="t-input" onchange="countTickets('crea')"></div>
-                        <button class="tab-btn" style="width:100%; font-size:10px" onclick="addTicketInput('list-crea', 'crea')">+ Adicionar</button>
-                    </div>
-                    <div class="tm-col">
-                        <div style="font-size:10px; font-weight:800">🟡 ASIGNADOS <span id="c-asig" class="bdg by">0</span></div>
-                        <div id="list-asig"><input type="text" class="t-input" onchange="countTickets('asig')"></div>
-                        <button class="tab-btn" style="width:100%; font-size:10px" onclick="addTicketInput('list-asig', 'asig')">+ Adicionar</button>
+                    <div>
+                        <label style="font-size:10px; font-weight:700; color:var(--t3)">NOVEDADES GENERALES (WhatsApp)</label>
+                        <textarea id="novedadesGenerales" class="fta" style="min-height:135px; border:2px solid var(--g); margin-top:5px" placeholder="Escribe aquí los detalles que irán al reporte..."></textarea>
                     </div>
                 </div>
-                <textarea id="prioridades" class="fta" style="margin-top:10px; border-color:#F59E0B" placeholder="Prioridades Relevo..."></textarea>
-                <textarea id="resumen-turno" class="fta" style="margin-top:10px" placeholder="Novedades Generales..."></textarea>
-                <button onclick="generarReporte()" style="width:100%; padding:12px; margin-top:10px; background:var(--bk); color:#fff; border:none; border-radius:8px; cursor:pointer">✓ GENERAR REPORTE</button>
+                
+                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px; padding-top:15px; border-top:1px solid var(--bd)">
+                    <button class="btns" onclick="limpiarForm()" style="padding:10px 20px; border-radius:8px; border:1px solid var(--bd)">Limpiar</button>
+                    <button class="btnp" onclick="generarReporteV5()" style="padding:10px 30px; border-radius:8px; background:var(--bk); color:white; font-weight:700">✓ GENERAR REPORTE</button>
+                </div>
             </div>
+        </div>
+
+        <div class="hist-v5">
+            <h4 style="font-family:var(--fh); font-size:14px; margin-bottom:15px;">📂 HISTORIAL DE ENTREGAS RECIENTES</h4>
+            <table class="htbl">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Ingeniero</th>
+                        <th>Turno</th>
+                        <th>Resumen Métricas</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpoHistorial">
+                    </tbody>
+            </table>
         </div>
     </div>
 
-    <div id="panel-registro" class="tab-panel">
-        <div class="tkr">
-            <div class="tkpi" style="--tc:#1DB954"><div style="font-size:10px">Horas Mes</div><div class="kpi-v">144</div></div>
-            <div class="tkpi" style="--tc:#EF4444"><div style="font-size:10px">Festivos</div><div class="kpi-v">3</div></div>
-        </div>
+    <div class="tab-panel" id="panel-registro">
         <div class="g2">
-            <div class="card"><div class="ch">Horas por Ingeniero</div><div class="cb"><canvas id="chart-h"></canvas></div></div>
-            <div class="card"><div class="ch">Distribución por Franja</div><div class="cb"><canvas id="chart-t"></canvas></div></div>
+            <div class="card"><div class="cb"><canvas id="chart-h" height="200"></canvas></div></div>
+            <div class="card"><div class="cb"><canvas id="chart-t" height="200"></canvas></div></div>
         </div>
-        <div class="card"><div class="ch">Festivos CO & AR</div><div class="cb" style="padding:0">
-            <table class="tbl">
-                <tr><th>Fecha</th><th>Festivo</th><th>País</th></tr>
-                <tr><td>20 mar</td><td>San José</td><td><span class="bdg br">🇨🇴 CO</span></td></tr>
-                <tr><td>24 mar</td><td>Día Memoria</td><td><span class="bdg bb">🇦🇷 AR</span></td></tr>
-                <tr><td>02 abr</td><td>Jueves Santo</td><td><span class="bdg br">🇨🇴 CO</span></td></tr>
-                <tr><td>03 abr</td><td>Viernes Santo</td><td><span class="bdg br">🇨🇴 CO</span> <span class="bdg bb">🇦🇷 AR</span></td></tr>
-            </table>
-        </div></div>
     </div>
 </div>
 
-<div id="modalReporte"><div class="modal-content">
-    <div style="font-weight:800; margin-bottom:10px">REPORTE WHATSAPP</div>
-    <textarea id="reportTextArea" readonly></textarea>
-    <button onclick="copiarReporte()" style="width:100%; padding:10px; margin-top:10px; background:var(--g); color:#fff; border:none; border-radius:8px">Copiar al Portapapeles</button>
-</div></div>
+<div id="modalReporte" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="cerrarModal()">×</span>
+        <h3 style="font-family:var(--fh)">REPORTE WHATSAPP</h3>
+        <div id="textoReporte"></div>
+        <button id="btnCopiar" onclick="copiarReporte()" style="width:100%; padding:12px; background:var(--g); color:white; border:none; border-radius:8px; font-weight:700; cursor:pointer">
+            Copiar al Portapapeles
+        </button>
+    </div>
+</div>
 
 <script>
-/* --- LÓGICA BASE --- */
-function updateClock() {
-    const now = new Date();
-    document.getElementById('hdrDate').textContent = now.toLocaleDateString('es-CO',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-    document.getElementById('liveClock').textContent = now.toLocaleTimeString('es-CO') + ' COT';
-    if(document.getElementById('lastUpd')) document.getElementById('lastUpd').textContent = '· ' + now.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
-}
-setInterval(updateClock, 1000); updateClock();
+    // --- LÓGICA V5 ---
+    let historial = JSON.parse(localStorage.getItem('historialNOC')) || [];
 
-document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    function switchTab(tab, btn) {
         document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('panel-' + tab).classList.add('active');
         btn.classList.add('active');
-        document.getElementById('panel-' + btn.getAttribute('data-tab')).classList.add('active');
-        if(btn.getAttribute('data-tab') === 'registro') initCharts();
-    });
-});
+        if(tab === 'registro') setTimeout(initCharts, 100);
+    }
 
-/* --- ENTREGA --- */
-let estadoAct = "🟢 TURNO LIMPIO";
-function setPill(el, txt) {
-    document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-    el.classList.add('active'); estadoAct = txt;
-}
-function addTicketInput(id, type) {
-    const container = document.getElementById(id);
-    const input = document.createElement('input');
-    input.type="text"; input.className="t-input"; input.onchange=()=>countTickets(type);
-    container.appendChild(input);
-}
-function countTickets(type) {
-    const inputs = document.querySelectorAll(`#list-${type} .t-input`);
-    let c = 0; inputs.forEach(i => { if(i.value.trim()!=="") c++; });
-    document.getElementById(`c-${type}`).textContent = c;
-}
-function generarReporte() {
-    const ing = document.getElementById('sel-ing').value;
-    if(!ing) return alert("Selecciona ingeniero");
-    const texto = `*ENTREGA DE TURNO NOC*\nIngeniero: ${ing}\nEstado: ${estadoAct}\nIssues: ${document.getElementById('val-issues').value}\nTV: ${document.getElementById('val-tv').value}\nMOPs: ${document.getElementById('val-mops').value}\nGestionados: ${document.getElementById('c-gest').textContent}\n\n*PRIORIDADES:*\n${document.getElementById('prioridades').value}`;
-    document.getElementById('reportTextArea').value = texto;
-    document.getElementById('modalReporte').style.display='flex';
-}
-function copiarReporte() {
-    document.getElementById('reportTextArea').select();
-    document.execCommand('copy'); alert('¡Copiado!');
-}
+    function generarReporteV5() {
+        const ing = document.getElementById('sel-ing').value;
+        if(!ing) { alert("Por favor selecciona un ingeniero"); return; }
 
-/* --- GRÁFICAS --- */
-function initCharts() {
-    new Chart(document.getElementById('chart-h'), {
-        type: 'bar',
-        data: {
-            labels: ['Jhon', 'Joseph', 'Jack', 'Durbey', 'Facundo', 'Luisa'],
-            datasets: [
-                { label: 'Diurno', data: [36, 60, 30, 42, 18, 36], backgroundColor: '#1DB954' },
-                { label: 'Nocturno', data: [36, 0, 30, 36, 54, 30], backgroundColor: '#8B5CF6' }
-            ]
-        },
-        options: { indexAxis: 'y', maintainAspectRatio: false, scales: { x: { stacked: true }, y: { stacked: true } } }
-    });
-    new Chart(document.getElementById('chart-t'), {
-        type: 'doughnut',
-        data: { labels: ['06-12', '12-18', '18-00', '00-06'], datasets: [{ data: [12, 10, 6, 8], backgroundColor: ['#1DB954', '#3B82F6', '#F59E0B', '#8B5CF6'] }] },
-        options: { maintainAspectRatio: false }
-    });
-}
-document.getElementById('sel-fecha').valueAsDate = new Date();
+        const fecha = document.getElementById('sel-fecha').value || new Date().toLocaleDateString();
+        const turno = document.getElementById('sel-turno').value;
+        const estado = document.querySelector('input[name="estado"]:checked').value;
+        const prioridades = document.getElementById('prioridadesRelevo').value || "Ninguna";
+        const novedades = document.getElementById('novedadesGenerales').value || "Sin novedades adicionales.";
+        
+        // Métricas
+        const issues = document.getElementById('kpi-issues').value;
+        const bandeja = document.getElementById('kpi-bandeja').value;
+        const tv = document.getElementById('kpi-tv').value;
+        const mops = document.getElementById('kpi-mops').value;
+
+        const reporte = `*ENTREGA DE TURNO NOC*
+Ingeniero: ${ing}
+Turno: ${turno}
+Fecha: ${fecha}
+Estado: ${estado}
+
+*MÉTRICAS:*
+Issues: ${issues}
+Bandeja Odoo: ${bandeja}
+TV Down: ${tv}
+MOPs: ${mops}
+
+*PRIORIDADES:*
+${prioridades}
+
+*NOVEDADES GENERALES:*
+${novedades}
+
+_Generado a las ${new Date().toLocaleTimeString()}_`;
+
+        document.getElementById('textoReporte').innerText = reporte;
+        document.getElementById('modalReporte').style.display = "flex";
+
+        // Guardar en historial
+        const nuevoRegistro = { fecha, ing, turno, resumen: `I:${issues} | B:${bandeja} | TV:${tv}` };
+        historial.unshift(nuevoRegistro);
+        if(historial.length > 10) historial.pop();
+        localStorage.setItem('historialNOC', JSON.stringify(historial));
+        renderHistorial();
+    }
+
+    function copiarReporte() {
+        const texto = document.getElementById('textoReporte').innerText;
+        navigator.clipboard.writeText(texto).then(() => {
+            const btn = document.getElementById('btnCopiar');
+            btn.innerText = "¡COPIADO!";
+            setTimeout(() => {
+                cerrarModal();
+                btn.innerText = "Copiar al Portapapeles";
+            }, 1200);
+        });
+    }
+
+    function cerrarModal() {
+        document.getElementById('modalReporte').style.display = "none";
+    }
+
+    function renderHistorial() {
+        const cuerpo = document.getElementById('cuerpoHistorial');
+        cuerpo.innerHTML = historial.map(h => `
+            <tr>
+                <td>${h.fecha}</td>
+                <td><strong>${h.ing}</strong></td>
+                <td>${h.turno}</td>
+                <td style="font-family:var(--fm); color:var(--gd)">${h.resumen}</td>
+            </tr>
+        `).join('');
+    }
+
+    function limpiarForm() {
+        if(confirm("¿Limpiar todo el formulario?")) {
+            document.getElementById('prioridadesRelevo').value = "";
+            document.getElementById('novedadesGenerales').value = "";
+            document.getElementById('sel-ing').value = "";
+        }
+    }
+
+    // --- RELLENO DE RELOJ Y GRÁFICOS ---
+    setInterval(() => {
+        document.getElementById('liveClock').innerText = new Date().toLocaleTimeString();
+    }, 1000);
+
+    function initCharts() {
+        // Chart Horas
+        new Chart(document.getElementById('chart-h'), {
+            type: 'bar',
+            data: {
+                labels: ['Jhon', 'Joseph', 'Jack'],
+                datasets: [{ label: 'Horas Turno', data: [120, 150, 80], backgroundColor: '#1DB954' }]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+        // Chart Turnos
+        new Chart(document.getElementById('chart-t'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Mañana', 'Tarde', 'Noche'],
+                datasets: [{ data: [40, 35, 25], backgroundColor: ['#1DB954', '#3B82F6', '#EF4444'] }]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+    }
+
+    window.onload = () => {
+        renderHistorial();
+        // Set fecha de hoy por defecto
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('sel-fecha').value = today;
+    };
 </script>
+
+</body>
+</html>Actualización V5: Historial y Novedades

@@ -320,27 +320,3 @@
 </script>
 </body>
 </html>
-/**
- * Función obligatoria para que el Dashboard pueda recibir datos
- */
-function doGet() {
-  const ahora = new Date();
-  const fecha = Utilities.formatDate(ahora, CONFIG.timezone, "dd/MM/yyyy");
-  
-  try {
-    const data = {
-      odoo: recopilarOdoo(),
-      tv: recopilarTV(),
-      mops: recopilarMops(),
-      asignados: recopilarAsignados(), // Este ya busca en noc@fibrazo.com
-      actualizado: fecha + " " + ahora.toLocaleTimeString(),
-      status: "success"
-    };
-
-    return ContentService.createTextOutput(JSON.stringify(data))
-      .setMimeType(ContentService.MimeType.JSON);
-  } catch (e) {
-    return ContentService.createTextOutput(JSON.stringify({ status: "error", message: e.message }))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-}

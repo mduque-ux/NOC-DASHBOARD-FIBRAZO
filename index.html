@@ -918,3 +918,36 @@ async function refreshRealData() {
     showToast('⚠️ Error de conexión con el Script', 'e');
   }
 }
+// Función para traer datos reales de Google Sheets automáticamente
+async function refreshRealData() {
+  // 1. REEMPLAZA ESTA URL CON LA QUE TE DIO GOOGLE (LA QUE TERMINA EN /exec)
+  const WEB_APP_URL = "https://script.google.com/macros/s/TU_ID_AQUI/exec"; 
+  
+  const syncLabel = document.getElementById('sync-label');
+  if(syncLabel) syncLabel.textContent = "🔄 Sincronizando con Google Sheets...";
+
+  try {
+    const response = await fetch(WEB_APP_URL);
+    const data = await response.json();
+    
+    // 2. Si hay datos de Odoo en el Excel, reemplazamos los de prueba
+    if(data.odoo && data.odoo.length > 0) {
+        ODOO_TICKETS.length = 0; // Vaciamos la lista vieja
+        data.odoo.forEach(t => ODOO_TICKETS.push(t)); // Metemos los nuevos del Excel
+        
+        renderDashboard(); // Dibujamos todo de nuevo con datos reales
+        showToast('✓ Datos de Google Sheets cargados');
+        if(syncLabel) syncLabel.textContent = "📡 Datos reales (Google Sheets)";
+    }
+  } catch (e) {
+    console.error("Error de conexión:", e);
+    showToast('⚠️ No se pudo conectar con el Excel', 'e');
+    if(syncLabel) syncLabel.textContent = "❌ Error de conexión";
+  }
+}
+
+// 3. HACER QUE SE EJECUTE SOLO AL CARGAR LA PÁGINA
+// Busca la última línea del archivo (updateHistCount();) y pega esto debajo:
+window.addEventListener('load', () => {
+  setTimeout(refreshRealData, 1500); // Se ejecuta 1.5 seg después de abrir para dar tiempo a la UI
+});

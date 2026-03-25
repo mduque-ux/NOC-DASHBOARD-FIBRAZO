@@ -1,4 +1,3 @@
-@@ -0,0 +1,921 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -120,7 +119,6 @@ body{font-family:var(--fb);background:var(--bg);color:var(--t1);font-size:13px;l
     <button class="tab-btn" data-tab="historial"><span class="tab-dot"></span>Historial <span class="badge-new" id="hist-count">0</span></button>
   </div>
 
-  <!-- ── DASHBOARD ── -->
   <div id="panel-dashboard" class="tab-panel active">
     <div class="hdr">
       <div>
@@ -198,7 +196,6 @@ body{font-family:var(--fb);background:var(--bg);color:var(--t1);font-size:13px;l
     </div>
   </div>
 
-  <!-- ── ENTREGA DE TURNO ── -->
   <div id="panel-turno" class="tab-panel">
     <div style="background:var(--bk);padding:20px;border-radius:16px;color:#fff;margin-bottom:12px">
       <div style="font-family:var(--fh);font-size:14px;font-weight:800;margin-bottom:12px">ENTREGA DE TURNO NOC <span class="badge-new">v5</span></div>
@@ -261,7 +258,6 @@ body{font-family:var(--fb);background:var(--bg);color:var(--t1);font-size:13px;l
     </div>
   </div>
 
-  <!-- ── REGISTRO & ANALÍTICA ── -->
   <div id="panel-registro" class="tab-panel">
     <div class="stat-grid">
       <div class="stat-card"><div class="stat-v" id="s-horas">144</div><div class="stat-l">Horas mes</div></div>
@@ -328,7 +324,6 @@ body{font-family:var(--fb);background:var(--bg);color:var(--t1);font-size:13px;l
     </div>
   </div>
 
-  <!-- ── HISTORIAL ── -->
   <div id="panel-historial" class="tab-panel">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
       <div>
@@ -348,7 +343,6 @@ body{font-family:var(--fb);background:var(--bg);color:var(--t1);font-size:13px;l
   </div>
 </div>
 
-<!-- ── MODAL REPORTE ── -->
 <div class="modal" id="modal-rep">
   <div class="modal-box">
     <div style="font-weight:700;font-size:15px;margin-bottom:4px">📤 Reporte WhatsApp</div>
@@ -361,7 +355,6 @@ body{font-family:var(--fb);background:var(--bg);color:var(--t1);font-size:13px;l
   </div>
 </div>
 
-<!-- ── TOAST ── -->
 <div class="toast" id="toast"></div>
 
 <script>
@@ -893,61 +886,38 @@ document.getElementById('sel-fecha').valueAsDate = new Date();
 renderDashboard();
 startAutoRefresh();
 updateHistCount();
-</script>
-</body>
-</html>
-}
+
+// --- FUNCIÓN DE SINCRONIZACIÓN CORREGIDA ---
 async function refreshRealData() {
-  // 1. Reemplaza con la URL que obtienes al dar en "Deploy" -> "Web App" en tu script
-  const WEB_APP_URL = "TU_URL_DE_DESPLIEGUE_AQUI"; 
-  
-  try {
-    const response = await fetch(WEB_APP_URL);
-    const data = await response.json();
-    
-    // 2. Mapear datos a tus variables globales
-    // Ejemplo para Odoo:
-    if(data.odoo) {
-       ODOO_TICKETS.length = 0;
-       data.odoo.forEach(t => ODOO_TICKETS.push(t));
-    }
-    
-    renderDashboard();
-    showToast('✓ Datos reales sincronizados');
-  } catch (e) {
-    showToast('⚠️ Error de conexión con el Script', 'e');
-  }
-}
-// Función para traer datos reales de Google Sheets automáticamente
-async function refreshRealData() {
-  // 1. REEMPLAZA ESTA URL CON LA QUE TE DIO GOOGLE (LA QUE TERMINA EN /exec)
-  const WEB_APP_URL = "https://script.google.com/macros/s/TU_ID_AQUI/exec"; 
+  // 1. SUSTITUYE ESTA URL POR TU URL REAL DE GOOGLE (QUE TERMINA EN /exec)
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby...TU_ID.../exec"; 
   
   const syncLabel = document.getElementById('sync-label');
-  if(syncLabel) syncLabel.textContent = "🔄 Sincronizando con Google Sheets...";
+  if(syncLabel) syncLabel.textContent = "🔄 Sincronizando...";
 
   try {
     const response = await fetch(WEB_APP_URL);
     const data = await response.json();
     
-    // 2. Si hay datos de Odoo en el Excel, reemplazamos los de prueba
     if(data.odoo && data.odoo.length > 0) {
-        ODOO_TICKETS.length = 0; // Vaciamos la lista vieja
-        data.odoo.forEach(t => ODOO_TICKETS.push(t)); // Metemos los nuevos del Excel
+        ODOO_TICKETS.length = 0; 
+        data.odoo.forEach(t => ODOO_TICKETS.push(t)); 
         
-        renderDashboard(); // Dibujamos todo de nuevo con datos reales
-        showToast('✓ Datos de Google Sheets cargados');
-        if(syncLabel) syncLabel.textContent = "📡 Datos reales (Google Sheets)";
+        renderDashboard(); 
+        showToast('✓ Datos sincronizados con éxito');
+        if(syncLabel) syncLabel.textContent = "📡 Datos en tiempo real";
     }
   } catch (e) {
-    console.error("Error de conexión:", e);
-    showToast('⚠️ No se pudo conectar con el Excel', 'e');
+    console.error("Error:", e);
+    showToast('⚠️ Error al conectar con el Script', 'e');
     if(syncLabel) syncLabel.textContent = "❌ Error de conexión";
   }
 }
 
-// 3. HACER QUE SE EJECUTE SOLO AL CARGAR LA PÁGINA
-// Busca la última línea del archivo (updateHistCount();) y pega esto debajo:
+// Ejecutar automáticamente al cargar la página
 window.addEventListener('load', () => {
-  setTimeout(refreshRealData, 1500); // Se ejecuta 1.5 seg después de abrir para dar tiempo a la UI
+  setTimeout(refreshRealData, 1000); 
 });
+</script>
+</body>
+</html>
